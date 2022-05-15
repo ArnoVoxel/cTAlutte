@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/arnau/AndroidStudioProjects/cTAlutte/app/src/main/res/drawable/bonhomme_marche.xml" value="0.195" />
         <entry key="..\:/Users/arnau/AndroidStudioProjects/cTAlutte/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/arnau/AndroidStudioProjects/cTAlutte/app/src/main/res/layout/fragment_menu.xml" value="0.365625" />
+        <entry key="..\:/Users/arnau/AndroidStudioProjects/cTAlutte/app/src/main/res/layout/menu_fragment.xml" value="0.25" />
       </map>
     </option>
   </component>

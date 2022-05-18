@@ -6,14 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <ImageView
         android:id="@+id/fond_bureau"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/background_sm_169"
         android:scaleType="centerCrop"
-        />
-
+        android:src="@drawable/background_sm_169"
+        tools:layout_editor_absoluteX="97dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <ImageView
         android:layout_width="67dp"
@@ -28,21 +29,30 @@
         app:layout_constraintStart_toStartOf="@+id/fond_bureau"
         app:layout_constraintTop_toTopOf="@+id/fond_bureau" />
 
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineRadioV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.55"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineRadioH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
     <ImageButton
         android:id="@+id/radio"
         android:layout_width="168dp"
         android:layout_height="138dp"
-        android:layout_marginStart="384dp"
-        android:layout_marginTop="171dp"
 
-
-        android:layout_marginEnd="179dp"
-        android:layout_marginBottom="102dp"
         android:background="@drawable/radio"
-        app:layout_constraintBottom_toBottomOf="@+id/fond_bureau"
-        app:layout_constraintEnd_toEndOf="@+id/fond_bureau"
-        app:layout_constraintStart_toStartOf="@+id/fond_bureau"
-        app:layout_constraintTop_toTopOf="@+id/fond_bureau" />
+        app:layout_constraintStart_toStartOf="@+id/guidelineRadioV"
+        app:layout_constraintTop_toTopOf="@+id/guidelineRadioH"
 
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

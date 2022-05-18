@@ -17,6 +17,8 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.DialogFragment
 import android.app.FragmentManager
+import android.content.Context
+import android.widget.Button
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         //Création de la modale
 //        setContentView(R.layout.menu_fragment)
  /*       Log.d("PLOP","Avant crea vue")
@@ -45,7 +48,16 @@ class MainActivity : AppCompatActivity() {
         Log.d("PLOP","Apres getinstance")
         accueilFragment.show(supportFragmentManager,AccueilFragment.TAG)
         Log.d("PLOP","Apres show")*/
-
+        /*var afficherMenu = true;
+        var boutonConnexion = findViewById<Button>(R.id.bouton_valider_modal)
+        boutonConnexion.setOnClickListener(View.OnClickListener {
+            afficherMenu = false;
+            Log.d("MainActivityBouton", afficherMenu.toString())
+            return@OnClickListener
+        })
+        Log.d("MainActivityBouton", afficherMenu.toString())*/
+        var popup = StartMenuKotlin()
+        popup.show(supportFragmentManager, "popo")
 
 
         var boutonRadio = findViewById<ImageButton>(androidx.appcompat.R.id.radio);

@@ -16,7 +16,17 @@
         tools:layout_editor_absoluteX="97dp"
         tools:layout_editor_absoluteY="0dp" />
 
-
+    <!--<fragment
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/modal_accueil"
+        android:name="com.example.ctalutte.MenuFragment"
+        />-->
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/modal_accueil"
+        android:name="com.example.ctalutte.StartMenuKotlin"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineRadioV"

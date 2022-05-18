@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var boutonRadio = findViewById<ImageButton>(R.id.radio);
+        var boutonRadio = findViewById<ImageButton>(androidx.appcompat.R.id.radio);
         boutonRadio.setOnClickListener(View.OnClickListener {
             var chanson = MediaPlayer.create(this, R.raw.the_internationale_english)
             chanson?.start()

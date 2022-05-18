@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        
+
         //Création de la modale
 //        setContentView(R.layout.menu_fragment)
  /*       Log.d("PLOP","Avant crea vue")

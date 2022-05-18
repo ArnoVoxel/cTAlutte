@@ -6,47 +6,43 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
+    <ImageView
+        android:id="@+id/fond_bureau"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:src="@drawable/background_sm_169"
+        android:scaleType="centerCrop"
+        />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-                <fragment
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/menuFragment"
-                android:name="com.example.ctalutte.MenuFragment"
-                />
 
-        </LinearLayout>
+    <ImageView
+        android:layout_width="67dp"
+        android:layout_height="101dp"
+        android:layout_marginStart="186dp"
+        android:layout_marginTop="247dp"
+        android:layout_marginEnd="478dp"
+        android:layout_marginBottom="63dp"
+        android:src="@drawable/dossier"
+        app:layout_constraintBottom_toBottomOf="@+id/fond_bureau"
+        app:layout_constraintEnd_toEndOf="@+id/fond_bureau"
+        app:layout_constraintStart_toStartOf="@+id/fond_bureau"
+        app:layout_constraintTop_toTopOf="@+id/fond_bureau" />
 
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".MainActivity">
+    <ImageButton
+        android:id="@+id/radio"
+        android:layout_width="168dp"
+        android:layout_height="138dp"
+        android:layout_marginStart="384dp"
+        android:layout_marginTop="171dp"
 
-            <pl.droidsonroids.gif.GifImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#fff"
-                android:src="@drawable/bonhomme_marche" />
-        </LinearLayout>
 
-    </LinearLayout>
+        android:layout_marginEnd="179dp"
+        android:layout_marginBottom="102dp"
+        android:background="@drawable/radio"
+        app:layout_constraintBottom_toBottomOf="@+id/fond_bureau"
+        app:layout_constraintEnd_toEndOf="@+id/fond_bureau"
+        app:layout_constraintStart_toStartOf="@+id/fond_bureau"
+        app:layout_constraintTop_toTopOf="@+id/fond_bureau" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

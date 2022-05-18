@@ -21,6 +21,7 @@ public class StartMenuFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         Toast toast = Toast.makeText(getContext(),"Clic OK", Toast.LENGTH_SHORT);
+                        toast.show();
                     }
                 })
                 .setNegativeButton(R.string.bouton_refuser, new DialogInterface.OnClickListener() {

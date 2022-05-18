@@ -40,22 +40,7 @@ class MainActivity : AppCompatActivity() {
 
 
         //Création de la modale
-//        setContentView(R.layout.menu_fragment)
- /*       Log.d("PLOP","Avant crea vue")
 
-        Log.d("PLOP","Apres crea vue")
-        val accueilFragment:AccueilFragment= AccueilFragment.getInstance()
-        Log.d("PLOP","Apres getinstance")
-        accueilFragment.show(supportFragmentManager,AccueilFragment.TAG)
-        Log.d("PLOP","Apres show")*/
-        /*var afficherMenu = true;
-        var boutonConnexion = findViewById<Button>(R.id.bouton_valider_modal)
-        boutonConnexion.setOnClickListener(View.OnClickListener {
-            afficherMenu = false;
-            Log.d("MainActivityBouton", afficherMenu.toString())
-            return@OnClickListener
-        })
-        Log.d("MainActivityBouton", afficherMenu.toString())*/
         var popup = StartMenuKotlin()
         popup.show(supportFragmentManager, "popo")
 

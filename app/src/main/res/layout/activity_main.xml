@@ -17,7 +17,6 @@
         tools:layout_editor_absoluteY="0dp" />
 
 
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineRadioV"
         android:layout_width="wrap_content"
@@ -54,12 +53,61 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.65" />
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/bouton_dossier"
         android:layout_width="67dp"
         android:layout_height="101dp"
-        android:src="@drawable/dossier"
+        android:background="@drawable/dossier"
+
         app:layout_constraintStart_toStartOf="@+id/guidelineDossierV"
         app:layout_constraintTop_toTopOf="@+id/guidelineDossierH" />
+
+    <FrameLayout
+        android:id="@+id/modal_accueil"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/fond_rouge"
+                android:alpha=".8"
+                android:layout_margin="50dp"
+                >
+                <!--                android:backgroundTint="@color/material_on_background_emphasis_medium"-->
+                <TextView
+                    android:id="@+id/text_champ_utilisateur"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/message_accueil" />
+
+
+                <EditText
+                    android:id="@+id/champ_nom_utilisateur"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:hint="A mettre en BDD en V2"
+                    android:inputType="text"
+                    app:layout_constraintTop_toBottomOf="@+id/text_champ_utilisateur"
+                    />
+
+                <Button
+                    android:id="@+id/bouton_valider_modal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bouton_valider"
+                    app:layout_constraintTop_toBottomOf="@+id/champ_nom_utilisateur"
+                    />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

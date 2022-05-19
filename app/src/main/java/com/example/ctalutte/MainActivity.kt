@@ -19,6 +19,7 @@ import androidx.fragment.app.DialogFragment
 import android.app.FragmentManager
 import android.content.Context
 import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,8 +42,8 @@ class MainActivity : AppCompatActivity() {
 
         //Création de la modale
 
-        var popup = StartMenuKotlin()
-        popup.show(supportFragmentManager, "popo")
+        /*var popup = StartMenuKotlin()
+        popup.show(supportFragmentManager, "popo")*/
 
 
         var boutonRadio = findViewById<ImageButton>(androidx.appcompat.R.id.radio);

@@ -9,19 +9,19 @@ import androidx.constraintlayout.motion.widget.Debug;
 public class Outils {
     private static Boolean DEBUG = true;
 
-    public void logPerso(String activite, String message){
+    public static void logPerso(String activite, String message){
         if(DEBUG){
         Log.d(activite, message);
         }
     }
 
-    public void toastCourt(Context context, String message){
+    public static void toastCourt(Context context, String message){
         if(DEBUG){
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void toastLong(Context context, String message){
+    public static void toastLong(Context context, String message){
         if(DEBUG){
             Toast.makeText(context, message, Toast.LENGTH_LONG).show();
         }

@@ -22,7 +22,20 @@ class TractActivity : AppCompatActivity() {
         setContentView(R.layout.activity_distrib)
         var tract = findViewById<ImageView>(R.id.drop_tract)
         tract.apply {
-            setOnLongClickListener { view ->
+            setOnTouchListener {  view, motionEvent ->
+                val item = ClipData.Item(view.tag as? CharSequence)
+
+                val dragData = ClipData(
+                    view.tag as? CharSequence,
+                    arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),item)
+
+                val myShadow = MyDragShadowBuilder(this)
+                view.startDragAndDrop(dragData,
+                    myShadow,
+                    null,
+                    0)
+                true}
+           /* setOnLongClickListener { view ->
                 val item = ClipData.Item(view.tag as? CharSequence)
 
                 val dragData = ClipData(
@@ -35,7 +48,7 @@ class TractActivity : AppCompatActivity() {
                                     null,
                                                 0)
                 true
-            }
+            }*/
         }
 
     }

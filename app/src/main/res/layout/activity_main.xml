@@ -53,10 +53,11 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.65" />
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/bouton_dossier"
         android:layout_width="67dp"
         android:layout_height="101dp"
-        android:src="@drawable/dossier"
+        android:background="@drawable/dossier"
 
         app:layout_constraintStart_toStartOf="@+id/guidelineDossierV"
         app:layout_constraintTop_toTopOf="@+id/guidelineDossierH" />
@@ -76,7 +77,11 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center"
+                android:background="@drawable/fond_rouge"
+                android:alpha=".8"
+                android:layout_margin="50dp"
                 >
+<!--                android:backgroundTint="@color/material_on_background_emphasis_medium"-->
             <TextView
                 android:id="@+id/text_champ_utilisateur"
                 android:layout_width="wrap_content"

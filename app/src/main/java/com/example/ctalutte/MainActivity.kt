@@ -23,6 +23,27 @@ import androidx.appcompat.app.AlertDialog
 
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var startMenuLayout: View
+
+    fun validerAdhesion(){
+
+
+            startMenuLayout = findViewById(R.id.modal_accueil)
+            startMenuLayout.visibility = View.GONE
+            // abonnement du bouton pour lancer la musique
+            var boutonRadio = findViewById<ImageButton>(androidx.appcompat.R.id.radio);
+            boutonRadio.setOnClickListener(View.OnClickListener {
+                var chanson = MediaPlayer.create(this, R.raw.the_internationale_english)
+                chanson?.start()
+            })
+
+            //abonnement bouton dossier
+        var boutonDossier = findViewById<ImageButton>(R.id.bouton_dossier)
+        boutonDossier.setOnClickListener(View.OnClickListener {
+            Outils.toastCourt(this, "Tu vas bosser fidèle Camarade")
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         //Affichage en plein écran + suprresion barre status
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -40,17 +61,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
+        var boutonAdhesion = findViewById<Button>(R.id.bouton_valider_modal)
+        boutonAdhesion.setOnClickListener(View.OnClickListener {
+            validerAdhesion()
+        })
         //Création de la modale
 
         /*var popup = StartMenuKotlin()
         popup.show(supportFragmentManager, "popo")*/
 
 
-        var boutonRadio = findViewById<ImageButton>(androidx.appcompat.R.id.radio);
-        boutonRadio.setOnClickListener(View.OnClickListener {
-            var chanson = MediaPlayer.create(this, R.raw.the_internationale_english)
-            chanson?.start()
-        })
+
 
     }
 

@@ -1,33 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pierre_ecran"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#32A2FF"
     tools:context=".CassePierreActivity">
 
-    <include layout="@layout/menu_fragment"/>
+    <include
+        android:id="@+id/include"
+        layout="@layout/menu_fragment"
+    />
 
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <View
-            android:id="@+id/particules_pierre_1"
-            android:layout_gravity="top|left"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            />
-
-    </FrameLayout>
 
     <ImageButton
         android:id="@+id/grosse_pierre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
         android:background="@drawable/pierre"
-        />
+        app:layout_constraintStart_toStartOf="@+id/guidelineVerticale"
+        app:layout_constraintTop_toTopOf="@+id/guidelineHorizontale" />
+
+    <LinearLayout
+        android:id="@+id/layout_pierres"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/include"
+        app:layout_constraintStart_toStartOf="@+id/include"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <nl.dionsegijn.konfetti.xml.KonfettiView
+        android:id="@+id/konfettiView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVerticale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="85dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="126dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

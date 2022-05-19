@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.DialogFragment
 import android.app.FragmentManager
 import android.content.Context
+import android.content.Intent
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 
@@ -41,6 +42,8 @@ class MainActivity : AppCompatActivity() {
         var boutonDossier = findViewById<ImageButton>(R.id.bouton_dossier)
         boutonDossier.setOnClickListener(View.OnClickListener {
             Outils.toastCourt(this, "Tu vas bosser fidèle Camarade")
+            val intent = Intent(this, CassePierreActivity::class.java)
+            startActivity(intent)
         })
     }
 

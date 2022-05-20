@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     // constantes pour les sharedPreferences
     val MES_PREFS = "dossier_camarade"
     val KEY_NOM_PREFS = "nom_du_camarade"
+    val KEY_NB_TACHES = "nb_taches_finies"
 
     private lateinit var startMenuLayout: View
 
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         val connexionBDD = Connexion(this, DB_NAME,null,DB_VERSION)
         Outils.logPerso("BDD", "après création connexion")
-        connexionBDD.ajouterCamarade(nomCamarade.text.toString(), 0, 0)
+        connexionBDD.ajouterCamarade(nomCamarade.text.toString(), 0, 0, "finie")
         Outils.logPerso("BDD", "après insert")
 
         //ajout du nom en préférences
@@ -51,11 +52,21 @@ class MainActivity : AppCompatActivity() {
         prefsEditor.putString(KEY_NOM_PREFS,nomCamarade.text.toString())
         prefsEditor.commit()
 
+        // ajout du nom dans le TextView
         val nomMurCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
-
         val vueNomCamarade = findViewById<TextView>(R.id.identite_camarade)
         vueNomCamarade.text = nomMurCamarade
 
+        // ajout du nombre de tâches réalisées
+        prefsEditor.putInt(KEY_NB_TACHES,0)
+        prefsEditor.commit()
+
+        // ajout du nb de tâches finies dans le TextView
+        val nbTachesMur = prefs.getInt(KEY_NB_TACHES, 0)
+        val vueNbTachesMur = findViewById<TextView>(R.id.nb_taches)
+        vueNbTachesMur.text = nbTachesMur.toString()
+
+        // cache le menu de connexion
         startMenuLayout = findViewById(R.id.modal_accueil)
         startMenuLayout.visibility = View.GONE
 
@@ -90,14 +101,6 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        //récupérer le nom dans les prefs
-        /*val prefs = this?.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
-        val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
-
-        val vueNomCamarade = findViewById<TextView>(R.id.identite_camarade)
-        vueNomCamarade.text = nomCamarade*/
-
 
         val boutonAdhesion = findViewById<Button>(R.id.bouton_valider_modal)
         boutonAdhesion.setOnClickListener(View.OnClickListener {

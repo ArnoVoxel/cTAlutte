@@ -8,4 +8,5 @@
     <string name="message_accueil">Il est temps de vous identifier Camarade !</string>
     <string name="bouton_valider">Validez votre adhésion</string>
     <string name="bouton_refuser">Pas de ça ici</string>
+    <string name="nom_decompte">temps restant : </string>
 </resources>

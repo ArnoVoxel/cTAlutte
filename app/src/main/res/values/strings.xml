@@ -9,4 +9,6 @@
     <string name="bouton_valider">Validez votre adhésion</string>
     <string name="bouton_refuser">Pas de ça ici</string>
     <string name="nom_decompte">temps restant : </string>
+    <string name="label_camarade">CAMARADE</string>
+    <string name="label_nb_taches">nb tâches réalisées</string>
 </resources>

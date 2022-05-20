@@ -7,6 +7,8 @@
     tools:context=".MainActivity">
 
 
+
+
     <ImageView
         android:id="@+id/fond_bureau"
         android:layout_width="match_parent"
@@ -16,6 +18,38 @@
         tools:layout_editor_absoluteX="97dp"
         tools:layout_editor_absoluteY="0dp" />
 
+        <TextView
+            android:id="@+id/label_camarade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_camarade"
+            app:layout_constraintStart_toStartOf="@id/guidelineDossierV"
+            app:layout_constraintBottom_toTopOf="@id/guidelineRadioH"
+            />
+        <TextView
+        android:id="@+id/identite_camarade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/guidelineDossierV"
+        app:layout_constraintTop_toBottomOf="@id/label_camarade"
+        />
+
+        <TextView
+            android:id="@+id/label_nb_taches"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_nb_taches"
+            app:layout_constraintStart_toStartOf="@id/guidelineDossierV"
+            app:layout_constraintTop_toBottomOf="@id/identite_camarade"
+            />
+    <TextView
+        android:id="@+id/nb_taches"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toStartOf="@id/guidelineDossierV"
+        app:layout_constraintTop_toBottomOf="@id/label_nb_taches"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineRadioV"

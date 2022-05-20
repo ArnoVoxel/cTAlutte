@@ -17,6 +17,7 @@ import androidx.fragment.app.DialogFragment
 import android.app.FragmentManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.provider.BaseColumns
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -24,8 +25,13 @@ import androidx.appcompat.app.AlertDialog
 
 class MainActivity : AppCompatActivity() {
 
+    // constantes pour la connexion
     val DB_NAME = "lutte";
     val DB_VERSION = 1;
+
+    // constantes pour les sharedPreferences
+    val MES_PREFS = "dossier_camarade"
+    val KEY_NOM_PREFS = "nom_du_camarade"
 
     private lateinit var startMenuLayout: View
 
@@ -33,11 +39,22 @@ class MainActivity : AppCompatActivity() {
 
         var nomCamarade = findViewById<EditText>(R.id.champ_nom_utilisateur)
         Outils.logPerso("BDD", "après récupération du nom"+nomCamarade.text.toString())
-        //nomCamarade.text.toString()
+
         val connexionBDD = Connexion(this, DB_NAME,null,DB_VERSION)
         Outils.logPerso("BDD", "après création connexion")
         connexionBDD.ajouterCamarade(nomCamarade.text.toString(), 0, 0)
         Outils.logPerso("BDD", "après insert")
+
+        //ajout du nom en préférences
+        val prefs = this?.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+        val prefsEditor = prefs.edit()
+        prefsEditor.putString(KEY_NOM_PREFS,nomCamarade.text.toString())
+        prefsEditor.commit()
+
+        val nomMurCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
+
+        val vueNomCamarade = findViewById<TextView>(R.id.identite_camarade)
+        vueNomCamarade.text = nomMurCamarade
 
         startMenuLayout = findViewById(R.id.modal_accueil)
         startMenuLayout.visibility = View.GONE
@@ -74,18 +91,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //récupérer le nom dans les prefs
+        /*val prefs = this?.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+        val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
 
-        var boutonAdhesion = findViewById<Button>(R.id.bouton_valider_modal)
+        val vueNomCamarade = findViewById<TextView>(R.id.identite_camarade)
+        vueNomCamarade.text = nomCamarade*/
+
+
+        val boutonAdhesion = findViewById<Button>(R.id.bouton_valider_modal)
         boutonAdhesion.setOnClickListener(View.OnClickListener {
             validerAdhesion()
         })
-        //Création de la modale
-
-        /*var popup = StartMenuKotlin()
-        popup.show(supportFragmentManager, "popo")*/
-
-
-
 
     }
 

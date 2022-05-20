@@ -61,4 +61,6 @@ public class Connexion extends SQLiteOpenHelper {
         Outils.logPerso("BDD","après insert en BDD");
         db.close();
     }
+
+
 }

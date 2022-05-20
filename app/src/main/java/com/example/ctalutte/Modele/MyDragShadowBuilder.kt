@@ -1,4 +1,4 @@
-package com.example.ctalutte
+package com.example.ctalutte.Modele
 
 import android.graphics.Canvas
 import android.graphics.Color

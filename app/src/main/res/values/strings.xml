@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">cTAlutte</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="tract">un tract ou la vie</string>
-    <string name="score">00/25</string>
+    <string name="tache_tract">un tract ou la vie</string>
+    <string name="tache_pierre">détruis moi ce caillou</string>
+    <string name="score">25</string>
     <string name="chrono">00:14</string>
     <string name="message_accueil">Il est temps de vous identifier Camarade !</string>
     <string name="bouton_valider">Validez votre adhésion</string>
+    <string name="bouton_refuser">Pas de ça ici</string>
+    <string name="nom_decompte">temps restant : </string>
 </resources>

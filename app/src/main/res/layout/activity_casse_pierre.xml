@@ -8,10 +8,18 @@
     android:background="#32A2FF"
     tools:context=".CassePierreActivity">
 
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/fond_pierre_sm_169"
+        app:layout_constraintStart_toStartOf="@id/pierre_ecran"
+        app:layout_constraintTop_toTopOf="@id/pierre_ecran"
+        />
+
     <include
         android:id="@+id/include"
         layout="@layout/menu_fragment" />
-
 
     <ImageView
         android:id="@+id/image_pierre"

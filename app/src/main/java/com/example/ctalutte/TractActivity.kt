@@ -1,6 +1,7 @@
 package com.example.ctalutte
 
 //import FragmentController
+import FragmentController
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Context
@@ -26,11 +27,20 @@ import kotlin.arrayOf
 class TractActivity : AppCompatActivity() {
 
     //Quelques variables
-//    var Frag : FragmentController?=null
+    fun initVariable (): FragmentController{
+    var frag = FragmentController()
+        frag.chronoTache = findViewById<TextView>(R.id.chrono)
+        frag.nomTache = findViewById<TextView>(R.id.nom_tache)
+        frag.scoreJoueur = findViewById<TextView>(R.id.score_joueur)
+        frag.context = this
+        frag.activity = this
+        return frag
+    }
+
     var score = 0
     var compteur : CountDownTimer?=null
-    var scoreJoueur : TextView?=null
-    var nomTache : TextView?=null
+//    var scoreJoueur : TextView?=null
+//    var nomTache : TextView?=null
 
 
 
@@ -45,6 +55,11 @@ class TractActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_distrib)
         val tract = findViewById<ImageView>(R.id.drop_tract)
+
+        var  frag = initVariable()
+        frag.timer(10)
+        frag.affichage(0)
+
         tract.apply {
             setOnTouchListener { view, motionEvent ->
                 val item = ClipData.Item(view.tag as? CharSequence)
@@ -64,8 +79,9 @@ class TractActivity : AppCompatActivity() {
                 true
             }
         }
-        timer(20)
-        affichage(0)
+
+//        timer(20)
+//        affichage(0)
         var poubelle = findViewById<ImageView>(R.id.poubelle)
         poubelle.setOnDragListener(poubListen)
         var bonhomme = findViewById<pl.droidsonroids.gif.GifImageView>(R.id.bonhomme)
@@ -183,25 +199,25 @@ class TractActivity : AppCompatActivity() {
     }
 
     //Timer
-    fun timer(time: Long) {
-    var chronoTache = findViewById<TextView>(R.id.chrono)
-     compteur = object : CountDownTimer(time*1000, 1000) {
-        override fun onTick(millisUntilFinished: Long) {
-            chronoTache.setText(decompte.toString())
-            decompte--
-        }
-
-        override fun onFinish() {
-            Outils.toastCourt(applicationContext, "Au GOULAG !")
-            finish()
-        }
-    }.start()
-    }
-
-    fun affichage(score:Int){
-        nomTache = findViewById<TextView>(R.id.nom_tache)
-        nomTache?.setText(R.string.tache_tract)
-        scoreJoueur = findViewById<TextView>(R.id.score_joueur)
-        scoreJoueur?.setText(score.toString())
-    }
+//    fun timer(time: Long) {
+//    var chronoTache = findViewById<TextView>(R.id.chrono)
+//     compteur = object : CountDownTimer(time*1000, 1000) {
+//        override fun onTick(millisUntilFinished: Long) {
+//            chronoTache.setText(decompte.toString())
+//            decompte--
+//        }
+//
+//        override fun onFinish() {
+//            Outils.toastCourt(applicationContext, "Au GOULAG !")
+//            finish()
+//        }
+//    }.start()
+//    }
+//
+//    fun affichage(score:Int){
+//        nomTache = findViewById<TextView>(R.id.nom_tache)
+//        nomTache?.setText(R.string.tache_tract)
+//        scoreJoueur = findViewById<TextView>(R.id.score_joueur)
+//        scoreJoueur?.setText(score.toString())
+//    }
 }

@@ -133,7 +133,7 @@
                     android:id="@+id/champ_nom_utilisateur"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:hint="A mettre en BDD en V2"
+                    android:hint="@string/champ_nom_camarade"
                     android:inputType="text"
                     app:layout_constraintTop_toBottomOf="@+id/text_champ_utilisateur" />
 
@@ -142,7 +142,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/bouton_valider"
-                    app:layout_constraintTop_toBottomOf="@+id/champ_nom_utilisateur" />
+                    app:layout_constraintTop_toBottomOf="@id/champ_nom_utilisateur" />
+
+                <Button
+                    android:id="@+id/bouton_continuer_modal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bouton_continuer"
+                    app:layout_constraintTop_toBottomOf="@id/bouton_valider_modal" />
+
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>

@@ -50,38 +50,35 @@ class MainActivity : AppCompatActivity() {
 
         startMenuLayout = findViewById(R.id.modal_accueil)
 
-        if(sessionActive){
-            // cache le menu de connexion
-            startMenuLayout.visibility = View.GONE
+        val boutonAdhesion = findViewById<Button>(R.id.bouton_valider_modal)
+        boutonAdhesion.setOnClickListener(View.OnClickListener {
+            val prefs = this?.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+            val sessionActive = prefs.getBoolean(KEY_SESSION_OUVERTE, false)
+                validerAdhesion()
+                startMenuLayout.visibility = View.GONE
+                abonnerBoutons()
+            })
 
-            afficherInfosCamarade()
-            abonnerBoutons()
-
-        } else {
-            // afficher le menu de connexion
-            startMenuLayout.visibility = View.VISIBLE
-            val boutonAdhesion = findViewById<Button>(R.id.bouton_valider_modal)
-            boutonAdhesion.setOnClickListener(View.OnClickListener {
-                val prefs = this?.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
-                val sessionActive = prefs.getBoolean(KEY_SESSION_OUVERTE, false)
-                    validerAdhesion()
-                    startMenuLayout.visibility = View.GONE
-                    abonnerBoutons()
-                })
-        }
-
+        val boutonContinuer = findViewById<Button>(R.id.bouton_continuer_modal)
+        boutonContinuer.setOnClickListener(View.OnClickListener {
+            Outils.logPerso("MainActivity", "entrée setOnClick Continuer")
+            val intentListe = Intent(this, ListeCamaradesActivity::class.java)
+            Outils.logPerso("MainActivity", "création de intent")
+            startActivity(intentListe)
+            Outils.logPerso("MainActivity", "lancement liste camarades")
+        })
 
     }
 
+    /**
+     * ajouter un Camarade en base de donnée et enregistre en session à partir du nom inscrit dans le champ
+     */
     fun validerAdhesion(){
 
         var nomCamarade = findViewById<EditText>(R.id.champ_nom_utilisateur)
-        Outils.logPerso("BDD", "après récupération du nom"+nomCamarade.text.toString())
-
         val connexionBDD = GestionBDD(this, DB_NAME, null, DB_VERSION)
-        Outils.logPerso("BDD", "après création connexion")
+
         connexionBDD.ajouterCamarade(nomCamarade.text.toString(), 0, 0, "oui")
-        Outils.logPerso("BDD", "après insert")
 
         // ajout du nom en préférences
         val prefs = this?.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
@@ -106,6 +103,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Récupère les infos en Préférences pour l'affichage
+     */
     fun afficherInfosCamarade(){
         val prefs = this?.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
 
@@ -115,6 +115,9 @@ class MainActivity : AppCompatActivity() {
         vueNomCamarade.text = nomMurCamarade
     }
 
+    /**
+     * Abonnement des boutons pour lancer une tâche ou activer la musique
+     */
     fun abonnerBoutons(){
         // abonnement du bouton pour lancer la musique
         var boutonRadio = findViewById<ImageButton>(androidx.appcompat.R.id.radio);

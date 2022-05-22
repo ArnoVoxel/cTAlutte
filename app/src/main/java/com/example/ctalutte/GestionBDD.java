@@ -1,11 +1,14 @@
 package com.example.ctalutte;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GestionBDD extends SQLiteOpenHelper {
 
@@ -48,19 +51,41 @@ public class GestionBDD extends SQLiteOpenHelper {
         return super.getWritableDatabase();
     }
 
-    public void ajouterCamarade(String nomCmarade, Integer scoreCamarade, Integer nbTachesCamarade, String tacheFinie){
-        Outils.logPerso("BDD","début fct ajouter");
+    public List<CamaradeInfos> getListeInfosCamarades(){
+        List<CamaradeInfos> listeCamarades = new ArrayList<CamaradeInfos>();
+
         SQLiteDatabase db = getReadableDatabase();
-        Outils.logPerso("BDD","après getReadable");
+
+        String requeteListe = "SELECT * FROM "+ TABLE_NAME;
+        Outils.logPerso("BDD", requeteListe);
+
+        Cursor cursor = db.rawQuery(requeteListe, null);
+
+        if(cursor.moveToFirst()){
+            do {
+                CamaradeInfos camarade = new CamaradeInfos();
+                camarade.setNom_joueur(cursor.getString(0));
+                camarade.setScore(cursor.getInt(1));
+                camarade.setTache_finie(cursor.getString(2));
+                camarade.setNb_taches(cursor.getInt(3));
+
+                listeCamarades.add(camarade);
+            }while (cursor.moveToNext());
+        }
+
+        return listeCamarades;
+    }
+
+    public void ajouterCamarade(String nomCmarade, Integer scoreCamarade, Integer nbTachesCamarade, String tacheFinie){
+
+        SQLiteDatabase db = getReadableDatabase();
+
         scoreCamarade = 0;
         nbTachesCamarade = 0;
 
         String insertCamarade ="INSERT INTO "+TABLE_NAME+" ("+NOM_JOUEUR+", "+SCORE+", "+NB_TACHES+","+TACHE_FINIE+") \n VALUES('"+nomCmarade+"', "+scoreCamarade+", "+nbTachesCamarade+", '"+tacheFinie+"');";
-        Outils.logPerso("BDD","après création de la string de requête");
-        Outils.logPerso("BDD","requête : "+insertCamarade);
 
         db.execSQL(insertCamarade);
-        Outils.logPerso("BDD","après insert en BDD");
         db.close();
     }
 

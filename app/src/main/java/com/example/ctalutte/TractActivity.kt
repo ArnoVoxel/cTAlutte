@@ -30,9 +30,7 @@ class TractActivity : AppCompatActivity() {
 
     var score = 0
     var compteur : CountDownTimer?=null
-//    var scoreJoueur : TextView?=null
-//    var nomTache : TextView?=null
-//    public var decompte =10
+
     override fun onCreate(savedInstanceState: Bundle?) {
         @Suppress("DEPRECATION")
         window.setFlags(
@@ -45,7 +43,7 @@ class TractActivity : AppCompatActivity() {
         val tract = findViewById<ImageView>(R.id.drop_tract)
 
         var  frag = initVariable()
-        frag.timer(frag.decompte)
+        var compteur = frag.timer()
         frag.affichage(0)
 
         tract.apply {
@@ -67,18 +65,18 @@ class TractActivity : AppCompatActivity() {
                 true
             }
         }
-
-//        timer(20)
-//        affichage(0)
+        var poubListen = createListenerPoubelle(compteur)
         var poubelle = findViewById<ImageView>(R.id.poubelle)
         poubelle.setOnDragListener(poubListen)
+        var bonhommeListen = createListenerCamarade(compteur)
         var bonhomme = findViewById<pl.droidsonroids.gif.GifImageView>(R.id.bonhomme)
-        bonhomme.setOnDragListener(camaradeListen)
+        bonhomme.setOnDragListener(bonhommeListen)
     }
 
 //Event listener camarade :
-    private val camaradeListen = View.OnDragListener {v, event ->
-        val receiverView:ImageView = v as ImageView
+    fun createListenerCamarade(compteur :CountDownTimer) : View.OnDragListener {
+        val camaradeListen = View.OnDragListener { v, event ->
+        val receiverView: ImageView = v as ImageView
         val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
         val total = Integer.valueOf(getString(R.string.score))
         when (event.action) {
@@ -102,8 +100,8 @@ class TractActivity : AppCompatActivity() {
                 receiverView.setBackgroundColor(Color.BLACK)
                 score += 5
                 scoreJoueur.setText(score.toString())
-                if(score == total){
-                    Outils.toastCourt(applicationContext,"VICTOIRE !")
+                if (score == total) {
+                    Outils.toastCourt(applicationContext, "VICTOIRE !")
                     compteur?.cancel()
                     finish()
                 }
@@ -113,10 +111,10 @@ class TractActivity : AppCompatActivity() {
             DragEvent.ACTION_DRAG_ENDED -> {
                 receiverView.setBackgroundColor(Color.DKGRAY)
                 v.invalidate()
-                when(event.result) {
+                when (event.result) {
                     true ->
                         receiverView.setBackgroundColor(Color.DKGRAY)
-                    else ->{
+                    else -> {
                         receiverView.setBackgroundColor(Color.GREEN)
                     }
                 }
@@ -126,9 +124,12 @@ class TractActivity : AppCompatActivity() {
                 false
             }
         }
-    }
+        }
+        return camaradeListen
+}
     //Event Listener poubelle
-    private val poubListen = View.OnDragListener {v, event ->
+    fun createListenerPoubelle(compteur :CountDownTimer) : View.OnDragListener {
+        val poubListen = View.OnDragListener {v, event ->
         val receiverView:ImageView = v as ImageView
         val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
         when (event.action) {
@@ -180,6 +181,8 @@ class TractActivity : AppCompatActivity() {
                 false
             }
         }
+        }
+        return poubListen
     }
 
     fun testRegard(): Boolean{
@@ -187,36 +190,14 @@ class TractActivity : AppCompatActivity() {
     }
 
     fun initVariable (): FragmentController{
-        var frag = FragmentController()
+        val frag = FragmentController()
         frag.chronoTache = findViewById<TextView>(R.id.chrono)
         frag.nomTache = findViewById<TextView>(R.id.nom_tache)
         frag.scoreJoueur = findViewById<TextView>(R.id.score_joueur)
         frag.context = this
         frag.activity = this
-        frag.decompte = 20
+        frag.decompte = 5
         return frag
     }
 
-    //Timer
-//    fun timer(time: Long) {
-//    var chronoTache = findViewById<TextView>(R.id.chrono)
-//     compteur = object : CountDownTimer(time*1000, 1000) {
-//        override fun onTick(millisUntilFinished: Long) {
-//            chronoTache.setText(decompte.toString())
-//            decompte--
-//        }
-//
-//        override fun onFinish() {
-//            Outils.toastCourt(applicationContext, "Au GOULAG !")
-//            finish()
-//        }
-//    }.start()
-//    }
-//
-//    fun affichage(score:Int){
-//        nomTache = findViewById<TextView>(R.id.nom_tache)
-//        nomTache?.setText(R.string.tache_tract)
-//        scoreJoueur = findViewById<TextView>(R.id.score_joueur)
-//        scoreJoueur?.setText(score.toString())
-//    }
 }

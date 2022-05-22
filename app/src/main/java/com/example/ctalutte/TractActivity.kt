@@ -1,7 +1,9 @@
 package com.example.ctalutte
 
+//import FragmentController
 import android.content.ClipData
 import android.content.ClipDescription
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -12,7 +14,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ctalutte.Modele.MyDragShadowBuilder
-import java.lang.String
 import kotlin.CharSequence
 import kotlin.Long
 import kotlin.Suppress
@@ -25,10 +26,11 @@ import kotlin.arrayOf
 class TractActivity : AppCompatActivity() {
 
     //Quelques variables
+//    var Frag : FragmentController?=null
     var score = 0
-
-
-
+    var compteur : CountDownTimer?=null
+    var scoreJoueur : TextView?=null
+    var nomTache : TextView?=null
 
 
 
@@ -42,7 +44,7 @@ class TractActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_distrib)
-        var tract = findViewById<ImageView>(R.id.drop_tract)
+        val tract = findViewById<ImageView>(R.id.drop_tract)
         tract.apply {
             setOnTouchListener { view, motionEvent ->
                 val item = ClipData.Item(view.tag as? CharSequence)
@@ -62,47 +64,21 @@ class TractActivity : AppCompatActivity() {
                 true
             }
         }
-        //intégration du nom de la tâche
-        val nomTache = findViewById<TextView>(R.id.nom_tache)
-        nomTache.setText(R.string.tache_pierre);
-        Outils.logPerso("PLOP","${nomTache.toString()}")
-
-        //intégration du score
-        val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
-        scoreJoueur.setText("0");
-
-        //initiliasation des variables
-
-        val total = Integer.valueOf(getString(R.string.score))
-
-        //intégration du timer
-        val chronoTache = findViewById<View>(R.id.chrono) as TextView
-        val compteur = object : CountDownTimer(10000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                chronoTache.setText(String.valueOf(decompte))
-                decompte--
-            }
-
-            override fun onFinish() {
-                Outils.toastCourt(applicationContext, "Au GOULAG !")
-                finish()
-            }
-        }.start()
-
+        timer(20)
+        affichage(0)
         var poubelle = findViewById<ImageView>(R.id.poubelle)
         poubelle.setOnDragListener(poubListen)
         var bonhomme = findViewById<pl.droidsonroids.gif.GifImageView>(R.id.bonhomme)
         bonhomme.setOnDragListener(camaradeListen)
     }
 
+//Event listener camarade :
     private val camaradeListen = View.OnDragListener {v, event ->
         val receiverView:ImageView = v as ImageView
         val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
         val total = Integer.valueOf(getString(R.string.score))
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
-                receiverView.setBackgroundColor(Color.BLUE)
-                v.invalidate()
                 true
             }
             DragEvent.ACTION_DRAG_ENTERED -> {
@@ -114,7 +90,6 @@ class TractActivity : AppCompatActivity() {
                 true
             DragEvent.ACTION_DRAG_EXITED -> {
                 receiverView.setBackgroundColor(Color.GREEN)
-
                 v.invalidate()
                 true
             }
@@ -125,6 +100,7 @@ class TractActivity : AppCompatActivity() {
                 scoreJoueur.setText(score.toString())
                 if(score == total){
                     Outils.toastCourt(applicationContext,"VICTOIRE !")
+                    compteur?.cancel()
                     finish()
                 }
                 v.invalidate()
@@ -147,14 +123,13 @@ class TractActivity : AppCompatActivity() {
             }
         }
     }
-    //Test d'un event Listener
+    //Event Listener poubelle
     private val poubListen = View.OnDragListener {v, event ->
         val receiverView:ImageView = v as ImageView
         val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
-                receiverView.setBackgroundColor(Color.RED)
-                v.invalidate()
+
                 true
             }
             DragEvent.ACTION_DRAG_ENTERED -> {
@@ -178,6 +153,7 @@ class TractActivity : AppCompatActivity() {
                     score = -10
                     scoreJoueur.setText(score.toString())
                     Outils.toastLong(applicationContext,"TRICHEUR !!")
+                    compteur?.cancel()
                     finish()
                 }
                 receiverView.setBackgroundColor(Color.CYAN)
@@ -204,5 +180,28 @@ class TractActivity : AppCompatActivity() {
 
     fun testRegard(): Boolean{
         return false;
+    }
+
+    //Timer
+    fun timer(time: Long) {
+    var chronoTache = findViewById<TextView>(R.id.chrono)
+     compteur = object : CountDownTimer(time*1000, 1000) {
+        override fun onTick(millisUntilFinished: Long) {
+            chronoTache.setText(decompte.toString())
+            decompte--
+        }
+
+        override fun onFinish() {
+            Outils.toastCourt(applicationContext, "Au GOULAG !")
+            finish()
+        }
+    }.start()
+    }
+
+    fun affichage(score:Int){
+        nomTache = findViewById<TextView>(R.id.nom_tache)
+        nomTache?.setText(R.string.tache_tract)
+        scoreJoueur = findViewById<TextView>(R.id.score_joueur)
+        scoreJoueur?.setText(score.toString())
     }
 }

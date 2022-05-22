@@ -27,24 +27,12 @@ import kotlin.arrayOf
 class TractActivity : AppCompatActivity() {
 
     //Quelques variables
-    fun initVariable (): FragmentController{
-    var frag = FragmentController()
-        frag.chronoTache = findViewById<TextView>(R.id.chrono)
-        frag.nomTache = findViewById<TextView>(R.id.nom_tache)
-        frag.scoreJoueur = findViewById<TextView>(R.id.score_joueur)
-        frag.context = this
-        frag.activity = this
-        return frag
-    }
 
     var score = 0
     var compteur : CountDownTimer?=null
 //    var scoreJoueur : TextView?=null
 //    var nomTache : TextView?=null
-
-
-
-    public var decompte =10
+//    public var decompte =10
     override fun onCreate(savedInstanceState: Bundle?) {
         @Suppress("DEPRECATION")
         window.setFlags(
@@ -57,7 +45,7 @@ class TractActivity : AppCompatActivity() {
         val tract = findViewById<ImageView>(R.id.drop_tract)
 
         var  frag = initVariable()
-        frag.timer(10)
+        frag.timer(frag.decompte)
         frag.affichage(0)
 
         tract.apply {
@@ -196,6 +184,17 @@ class TractActivity : AppCompatActivity() {
 
     fun testRegard(): Boolean{
         return false;
+    }
+
+    fun initVariable (): FragmentController{
+        var frag = FragmentController()
+        frag.chronoTache = findViewById<TextView>(R.id.chrono)
+        frag.nomTache = findViewById<TextView>(R.id.nom_tache)
+        frag.scoreJoueur = findViewById<TextView>(R.id.score_joueur)
+        frag.context = this
+        frag.activity = this
+        frag.decompte = 20
+        return frag
     }
 
     //Timer

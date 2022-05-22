@@ -19,7 +19,7 @@ import com.example.ctalutte.R
     var scoreJoueur : TextView?=null
     var nomTache : TextView?=null
 //    var decompte : Int?=null
-    var decompte = 10
+    var decompte : Long =10
     var context:Context?=null
     var activity:Activity?=null
 //
@@ -31,7 +31,8 @@ fun timer(time: Long) {
  compteur = object : CountDownTimer(time*1000, 1000) {
   override fun onTick(millisUntilFinished: Long) {
    chronoTache?.setText(decompte.toString())
-   decompte--
+
+      decompte--
   }
 
   override fun onFinish() {
@@ -41,6 +42,10 @@ fun timer(time: Long) {
   }
  }.start()
 }
+
+    fun finTimer(){
+        compteur?.cancel()
+    }
 
 fun affichage(score:Int){
 

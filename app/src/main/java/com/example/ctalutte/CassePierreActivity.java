@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -30,6 +31,15 @@ public class CassePierreActivity extends AppCompatActivity {
 
     CountDownTimer compteur;
     public int decompte = 10;
+
+    // constantes pour la connexion
+    private final String DB_NAME = "lutte";
+    private final Integer DB_VERSION = 1;
+
+    // constantes pour les sharedPreferences
+    private final String MES_PREFS = "dossier_camarade";
+    private final String KEY_NOM_PREFS = "nom_du_camarade";
+    private final String KEY_NB_TACHES = "nb_taches_finies";
 
 
     @Override
@@ -90,7 +100,16 @@ public class CassePierreActivity extends AppCompatActivity {
 
                 if(score == total){
                     Outils.toastCourt(getApplicationContext(), "RALACHO TAVARICH !");
+                    // RAZ du décompte de la tâche
                     compteur.cancel();
+
+                    // MAJ des infos en BDD
+                    GestionBDD connexionBDD = new GestionBDD(getApplicationContext(), DB_NAME, null, DB_VERSION);
+                    SharedPreferences prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE);
+                    String nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE");
+                    connexionBDD.terminerTache(nomCamarade, 50);
+
+                    // retour au mainActivity
                     finish();
                 } else {
                     score++;

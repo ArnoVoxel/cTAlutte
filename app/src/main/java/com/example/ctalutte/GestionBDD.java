@@ -7,7 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-public class Connexion extends SQLiteOpenHelper {
+public class GestionBDD extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "lutte";
     private static final Integer DB_VERSION = 1;
@@ -17,7 +17,7 @@ public class Connexion extends SQLiteOpenHelper {
     private static final String NB_TACHES = "nb_taches";
     private static final String TACHE_FINIE = "tache_finie";
 
-    public Connexion(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version ) {
+    public GestionBDD(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version ) {
         super(context, name, factory, version);
     }
 
@@ -62,6 +62,43 @@ public class Connexion extends SQLiteOpenHelper {
         db.execSQL(insertCamarade);
         Outils.logPerso("BDD","après insert en BDD");
         db.close();
+    }
+
+    public void commencerTache(String nomCamarade){
+        Outils.logPerso("modifierBDD", "début fct ternimerTache");
+        SQLiteDatabase db = getReadableDatabase();
+        Outils.logPerso("modifierBDD","après getReadable");
+
+        String modifierTache = "UPDATE "+TABLE_NAME+" SET "+ TACHE_FINIE+" = \'non\' WHERE "+ NOM_JOUEUR+" = "+ nomCamarade +";";
+        Outils.logPerso("modifierBDD","après préparation de la requête");
+        Outils.logPerso("modifierBDD",modifierTache);
+
+        db.execSQL(modifierTache);
+        Outils.logPerso("modifierBDD","après exécution de la requête");
+    }
+
+    public void terminerTache(String nomCamarade, int nouveauScore){
+        Outils.logPerso("modifierBDD", "début fct ternimerTache");
+        SQLiteDatabase db = getReadableDatabase();
+        Outils.logPerso("modifierBDD","après getReadable");
+
+        String modifierTache = "UPDATE "+TABLE_NAME+" SET "+ TACHE_FINIE+" = \'oui\' WHERE "+ NOM_JOUEUR+" = "+ nomCamarade +";";
+        Outils.logPerso("modifierBDD","après préparation de la requête");
+        Outils.logPerso("modifierBDD",modifierTache);
+
+        db.execSQL(modifierTache);
+        Outils.logPerso("modifierBDD","après tâche finie passée à oui");
+        modifierScoreNbTache(nomCamarade, nouveauScore);
+        Outils.logPerso("modifierBDD","après nouveau Score et nb tâches incrémenté");
+    }
+
+    public void modifierScoreNbTache(String nomCamarade, int nouveauScore){
+        SQLiteDatabase db = getReadableDatabase();
+
+        String nouveauScoreNbTache = "UPDATE "+TABLE_NAME+" SET "+SCORE+" = "+SCORE+" +" +nouveauScore+" ,"+ NB_TACHES+" = "+NB_TACHES+" +1\n" +
+                "WHERE "+NOM_JOUEUR+" = "+ nomCamarade+";";
+
+        db.execSQL(nouveauScoreNbTache);
     }
 
 

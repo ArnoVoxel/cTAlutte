@@ -1,6 +1,6 @@
 package com.example.ctalutte
 
-//import FragmentController
+
 import FragmentController
 import android.content.ClipData
 import android.content.ClipDescription
@@ -29,7 +29,7 @@ class TractActivity : AppCompatActivity() {
     //Quelques variables
 
     var score = 0
-    var compteur : CountDownTimer?=null
+//    var compteur : CountDownTimer?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         @Suppress("DEPRECATION")
@@ -41,9 +41,11 @@ class TractActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_distrib)
         val tract = findViewById<ImageView>(R.id.drop_tract)
+        val  frag = FragmentController(findViewById<TextView>(R.id.chrono),
+            null,findViewById<TextView>(R.id.score_joueur),
+            findViewById<TextView>(R.id.nom_tache),5,this,this)
 
-        var  frag = initVariable()
-        var compteur = frag.timer()
+       var compteur = frag.timer()
         frag.affichage(0)
 
         tract.apply {
@@ -189,15 +191,15 @@ class TractActivity : AppCompatActivity() {
         return false;
     }
 
-    fun initVariable (): FragmentController{
-        val frag = FragmentController()
-        frag.chronoTache = findViewById<TextView>(R.id.chrono)
-        frag.nomTache = findViewById<TextView>(R.id.nom_tache)
-        frag.scoreJoueur = findViewById<TextView>(R.id.score_joueur)
-        frag.context = this
-        frag.activity = this
-        frag.decompte = 5
-        return frag
-    }
+//    fun initVariable (): FragmentController{
+//        val frag = FragmentController()
+//        frag.chronoTache = findViewById<TextView>(R.id.chrono)
+//        frag.nomTache = findViewById<TextView>(R.id.nom_tache)
+//        frag.scoreJoueur = findViewById<TextView>(R.id.score_joueur)
+//        frag.context = this
+//        frag.activity = this
+//        frag.decompte = 5
+//        return frag
+//    }
 
 }

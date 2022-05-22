@@ -13,20 +13,17 @@ import com.example.ctalutte.R
 
 //
 //
- class FragmentController  {
-    var chronoTache:TextView?=null
-    var compteur : CountDownTimer?=null
-    var scoreJoueur : TextView?=null
-    var nomTache : TextView?=null
-    var decompte : Long =10
-    var context:Context?=null
-    var activity:Activity?=null
-//
-//
-//
+ class FragmentController constructor(var chronoTache : TextView,
+                                      var compteur : CountDownTimer?=null,
+                                      var scoreJoueur : TextView,
+                                      var nomTache : TextView,
+                                      var decompte : Long =10,
+                                      var context:Context,
+                                      var activity:Activity)  {
+
 //Timer
 fun timer(): CountDownTimer {
-
+//var compteur = getCompteur()
  compteur = object : CountDownTimer(decompte*1000, 1000) {
   override fun onTick(millisUntilFinished: Long) {
    chronoTache?.setText(decompte.toString())
@@ -38,6 +35,8 @@ fun timer(): CountDownTimer {
   override fun onFinish() {
 
       Outils.toastCourt(context, "Au GOULAG !")
+
+//      getActivity().finish()
       activity?.finish()
   }
  }.start()

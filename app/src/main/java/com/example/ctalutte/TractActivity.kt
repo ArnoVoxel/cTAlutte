@@ -42,8 +42,12 @@ class TractActivity : AppCompatActivity() {
         setContentView(R.layout.activity_distrib)
         val tract = findViewById<ImageView>(R.id.drop_tract)
         val  frag = FragmentController(findViewById<TextView>(R.id.chrono),
-            null,findViewById<TextView>(R.id.score_joueur),
-            findViewById<TextView>(R.id.nom_tache),5,this,this)
+                                        null,
+                                        findViewById<TextView>(R.id.score_joueur),
+                                        findViewById<TextView>(R.id.nom_tache),
+                                        25,
+                                        this,
+                                        this)
 
        var compteur = frag.timer()
         frag.affichage(0)
@@ -67,11 +71,11 @@ class TractActivity : AppCompatActivity() {
                 true
             }
         }
-        var poubListen = createListenerPoubelle(compteur)
-        var poubelle = findViewById<ImageView>(R.id.poubelle)
+        val poubListen = createListenerPoubelle(compteur)
+        val poubelle = findViewById<ImageView>(R.id.poubelle)
         poubelle.setOnDragListener(poubListen)
-        var bonhommeListen = createListenerCamarade(compteur)
-        var bonhomme = findViewById<pl.droidsonroids.gif.GifImageView>(R.id.bonhomme)
+        val bonhommeListen = createListenerCamarade(compteur)
+        val bonhomme = findViewById<pl.droidsonroids.gif.GifImageView>(R.id.bonhomme)
         bonhomme.setOnDragListener(bonhommeListen)
     }
 
@@ -191,15 +195,6 @@ class TractActivity : AppCompatActivity() {
         return false;
     }
 
-//    fun initVariable (): FragmentController{
-//        val frag = FragmentController()
-//        frag.chronoTache = findViewById<TextView>(R.id.chrono)
-//        frag.nomTache = findViewById<TextView>(R.id.nom_tache)
-//        frag.scoreJoueur = findViewById<TextView>(R.id.score_joueur)
-//        frag.context = this
-//        frag.activity = this
-//        frag.decompte = 5
-//        return frag
-//    }
+
 
 }

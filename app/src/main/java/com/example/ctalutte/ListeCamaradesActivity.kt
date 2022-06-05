@@ -32,13 +32,6 @@ class ListeCamaradesActivity : AppCompatActivity() {
             var infoCamarade = "nom : " + Camarade.nomCamarade +", score : " + Camarade.scoreCamarade + ", taches terminées : " + Camarade.nb_taches
             Outils.logPerso("Camarades",infoCamarade)
 
-//            var listeCamarades = findViewById<TextView>(R.id.liste_camarades)
-//            listeCamarades.append("\nnom : ")
-//            listeCamarades.append(Camarade.nomCamarade)
-//            listeCamarades.append(", score : ")
-//            listeCamarades.append(Camarade.scoreCamarade.toString())
-//            listeCamarades.append(", tâches terminées : ")
-//            listeCamarades.append(Camarade.nb_taches.toString())
 
             Outils.logPerso("ListeCamaradeItem", Camarade.nomCamarade)
             listeTemp.add(Camarade.nomCamarade + ", score : "+Camarade.scoreCamarade + ", tâches terminées : " + Camarade.nb_taches)
@@ -47,6 +40,7 @@ class ListeCamaradesActivity : AppCompatActivity() {
         var adapterCamarades = ArrayAdapter<String>(this, com.google.android.material.R.layout.abc_action_menu_item_layout, listeTemp)
         Outils.logPerso("ListeCamaradeItem", listeTemp.toString())
         var tableauCamarades = findViewById<ListView>(R.id.tableau_camarades)
+
         tableauCamarades.adapter = adapterCamarades
     }
 }

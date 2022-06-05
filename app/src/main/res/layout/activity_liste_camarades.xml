@@ -16,18 +16,11 @@
         android:gravity="center"
         />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/liste_camarades"
-        app:layout_constraintTop_toBottomOf="@id/titre_liste_camarades"
-        />
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tableau_camarades"
-        app:layout_constraintTop_toBottomOf="@id/liste_camarades"
+        app:layout_constraintTop_toBottomOf="@id/titre_liste_camarades"
         />
 
     <Button

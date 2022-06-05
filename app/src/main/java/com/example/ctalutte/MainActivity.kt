@@ -55,21 +55,49 @@ class MainActivity : AppCompatActivity() {
         // test si session active en préférences
         val prefs = this?.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
         val prefsEditor = prefs.edit()
-        prefsEditor.putBoolean(KEY_SESSION_OUVERTE, true)
-        val sessionActive = prefs.getBoolean(KEY_SESSION_OUVERTE, false)
+
+        var sessionActive = false
+
+        val nomMurCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
+        /*if(nomMurCamarade.equals("CAMARADE")){
+            sessionActive = prefs.getBoolean(KEY_SESSION_OUVERTE, false)
+            Outils.logPerso("lancement", "if false : "+sessionActive.toString())
+        } else {
+            prefsEditor.putBoolean(KEY_SESSION_OUVERTE, true)
+            Outils.logPerso("lancement", "if true : "+sessionActive.toString())
+            startMenuLayout.visibility = View.GONE
+            abonnerBoutons()
+        }*/
 
         startMenuLayout = findViewById(R.id.modal_accueil)
 
         val boutonAdhesion = findViewById<Button>(R.id.bouton_valider_modal)
         boutonAdhesion.setOnClickListener(View.OnClickListener {
             val prefs = this?.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
-            val sessionActive = prefs.getBoolean(KEY_SESSION_OUVERTE, false)
-            validerAdhesion()
-            startMenuLayout.visibility = View.GONE
-            abonnerBoutons()
+            sessionActive = prefs.getBoolean(KEY_SESSION_OUVERTE, false)
+
+            //contrôle du champ sur le nom du camarade
+            var nomCamarade = findViewById<EditText>(R.id.champ_nom_utilisateur)
+            if(nomCamarade.length()<1){
+                Outils.toastLong(this, "Veuillez entrer un nom")
+            } else {
+                validerAdhesion()
+                startMenuLayout.visibility = View.GONE
+                abonnerBoutons()
+            }
         })
 
+        //affichage du bouton reprendre uniquement si nom existant en BDD
+        val connexionBDD = GestionBDD(this, DB_NAME, null, DB_VERSION)
+        var listeCamarades = connexionBDD.getListeInfosCamarades()
         val boutonContinuer = findViewById<Button>(R.id.bouton_continuer_modal)
+
+        Outils.logPerso("connexion", listeCamarades.size.toString())
+
+        if(listeCamarades.size.toInt().equals(0)){
+            boutonContinuer.visibility = View.GONE
+        } else {
+
         boutonContinuer.setOnClickListener(View.OnClickListener {
             Outils.logPerso("MainActivity", "entrée setOnClick Continuer")
             val intentListe = Intent(this, ListeCamaradesActivity::class.java)
@@ -77,14 +105,19 @@ class MainActivity : AppCompatActivity() {
             startActivity(intentListe)
             Outils.logPerso("MainActivity", "lancement liste camarades")
         })
+        }
+
     }
 
     /**
      * ajouter un Camarade en base de donnée et enregistre en session à partir du nom inscrit dans le champ
      */
     fun validerAdhesion(){
+        Outils.logPerso("connexion", "entrée fct validerAdhesion")
 
         var nomCamarade = findViewById<EditText>(R.id.champ_nom_utilisateur)
+
+
         val connexionBDD = GestionBDD(this, DB_NAME, null, DB_VERSION)
 
         connexionBDD.ajouterCamarade(nomCamarade.text.toString(), 0, 0, "oui")
@@ -109,6 +142,8 @@ class MainActivity : AppCompatActivity() {
         val nbTachesMur = prefs.getInt(KEY_NB_TACHES, 0)
         val vueNbTachesMur = findViewById<TextView>(R.id.nb_taches)
         vueNbTachesMur.text = nbTachesMur.toString()
+
+
 
     }
 

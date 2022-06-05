@@ -20,7 +20,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/liste_camarades"
-        app:layout_constraintTop_toTopOf="@id/titre_liste_camarades"
+        app:layout_constraintTop_toBottomOf="@id/titre_liste_camarades"
+        />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tableau_camarades"
+        app:layout_constraintTop_toBottomOf="@id/liste_camarades"
         />
 
     <Button
@@ -29,7 +36,7 @@
         android:id="@+id/bouton_liste_camarades_retour"
         android:text="retour"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/liste_camarades"
+        app:layout_constraintTop_toBottomOf="@id/tableau_camarades"
         app:layout_constraintStart_toStartOf="@id/ecran_liste_camarades"
         app:layout_constraintEnd_toEndOf="@id/ecran_liste_camarades"
         />

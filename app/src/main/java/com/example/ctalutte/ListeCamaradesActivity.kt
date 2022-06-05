@@ -37,10 +37,13 @@ class ListeCamaradesActivity : AppCompatActivity() {
             listeTemp.add(Camarade.nomCamarade + ", score : "+Camarade.scoreCamarade + ", tâches terminées : " + Camarade.nb_taches)
         }
             //adapter pour remplir dynamiquement le listView
-        var adapterCamarades = ArrayAdapter<String>(this, com.google.android.material.R.layout.abc_action_menu_item_layout, listeTemp)
+        var adapterCamarades = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listeTemp)
         Outils.logPerso("ListeCamaradeItem", listeTemp.toString())
         var tableauCamarades = findViewById<ListView>(R.id.tableau_camarades)
-
         tableauCamarades.adapter = adapterCamarades
+        //tableauCamarades.setOnItemClickListener(AdapterView.OnItemClickListener(onContextItemSelected()))
+
     }
 }
+
+

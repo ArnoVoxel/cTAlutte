@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/tract_ecran"
+    tools:context=".TractActivity">
+
+
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/fond_distrib_tract" />
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/menu_fragment"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        />
+
+
+
+    <ImageView
+        android:id="@+id/pile_tract"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/pile_tracts"
+        app:layout_constraintStart_toStartOf="@id/guide_verti_tract"
+        app:layout_constraintBottom_toTopOf="@id/guide_hori_tract"/>
+
+    <ImageView
+        android:id="@+id/drop_tract"
+        android:layout_width="105dp"
+        android:layout_height="105dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintStart_toStartOf="@id/guide_verti_tract"
+        app:layout_constraintBottom_toTopOf="@id/guide_hori_tract"
+        android:src="@drawable/tract" />
+
+    <ImageView
+        android:id="@+id/pouce"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/pouce"
+        app:layout_constraintStart_toStartOf="@id/pile_tract"
+        app:layout_constraintBottom_toBottomOf="@id/pile_tract"
+        />
+
+    <ImageView
+        android:id="@+id/poubelle"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:src="@drawable/poubelle"
+        app:layout_constraintEnd_toStartOf="@+id/guide_verti_poubelle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <!--<ImageView
+        android:id="@+id/bonhomme"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:src="@drawable/bonhomme"
+        app:layout_constraintStart_toEndOf="@+id/guide_verti_tract"
+        app:layout_constraintTop_toTopOf="@+id/guide_hori_bonhomme"
+        />-->
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/bonhomme"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/bonhomme_marche"
+        app:layout_constraintStart_toEndOf="@+id/guide_verti_tract"
+        app:layout_constraintTop_toTopOf="@+id/guide_hori_bonhomme"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_hori_pouce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.60" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_verti_tract"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_hori_tract"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_verti_poubelle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_hori_bonhomme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_frag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+</androidx.constraintlayout.widget.ConstraintLayout>

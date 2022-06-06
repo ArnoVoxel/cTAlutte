@@ -24,6 +24,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ListeCamaradesActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".CassePierreActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity android:name="TractActivity"
+            android:screenOrientation="landscape">
+        </activity>
     </application>
 
 </manifest>

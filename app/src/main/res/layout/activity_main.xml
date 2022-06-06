@@ -12,25 +12,61 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/background_sm_169"
+        android:src="@drawable/fond_crayon_sm_169"
         tools:layout_editor_absoluteX="97dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="0dp"
+        />
 
+    <TextView
+        android:id="@+id/label_camarade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_camarade"
+        app:layout_constraintBottom_toTopOf="@id/guidelineRadioH"
+        app:layout_constraintStart_toStartOf="@id/guidelineInfos"
+        />
 
+    <TextView
+        android:id="@+id/identite_camarade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/guidelineInfos"
+        app:layout_constraintTop_toBottomOf="@id/label_camarade"
+        />
+
+    <TextView
+        android:id="@+id/label_nb_taches"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_nb_taches"
+        app:layout_constraintStart_toStartOf="@id/guidelineInfos"
+        app:layout_constraintTop_toBottomOf="@id/identite_camarade"
+        />
+
+    <TextView
+        android:id="@+id/nb_taches"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toStartOf="@id/guidelineInfos"
+        app:layout_constraintTop_toBottomOf="@id/label_nb_taches"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineRadioV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.55"/>
+        app:layout_constraintGuide_percent="0.55"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineRadioH"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.5"
+        />
 
     <ImageButton
         android:id="@+id/radio"
@@ -40,26 +76,91 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineRadioV"
         app:layout_constraintTop_toTopOf="@+id/guidelineRadioH"
         />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineDossierV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.28"/>
+        app:layout_constraintGuide_percent="0.28"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineDossierH"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.65" />
+        app:layout_constraintGuide_percent="0.65"
+        />
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/bouton_dossier"
         android:layout_width="67dp"
         android:layout_height="101dp"
-        android:src="@drawable/dossier"
+        android:background="@drawable/dossier"
+
         app:layout_constraintStart_toStartOf="@+id/guidelineDossierV"
-        app:layout_constraintTop_toTopOf="@+id/guidelineDossierH" />
+        app:layout_constraintTop_toTopOf="@+id/guidelineDossierH"
+        />
+
+    <FrameLayout
+        android:id="@+id/modal_accueil"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="50dp"
+                android:alpha=".8"
+                android:background="@drawable/fond_rouge"
+                android:gravity="center"
+                android:orientation="vertical">
+                <!--                android:backgroundTint="@color/material_on_background_emphasis_medium"-->
+                <TextView
+                    android:id="@+id/text_champ_utilisateur"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/message_accueil" />
+
+
+                <EditText
+                    android:id="@+id/champ_nom_utilisateur"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:hint="@string/champ_nom_camarade"
+                    android:inputType="text"
+                    app:layout_constraintTop_toBottomOf="@+id/text_champ_utilisateur" />
+
+                <Button
+                    android:id="@+id/bouton_valider_modal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bouton_valider"
+                    app:layout_constraintTop_toBottomOf="@id/champ_nom_utilisateur" />
+
+                <Button
+                    android:id="@+id/bouton_continuer_modal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bouton_continuer"
+                    app:layout_constraintTop_toBottomOf="@id/bouton_valider_modal" />
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineInfos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="40dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <ImageView
+        android:id="@+id/fond_bureau"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/fond_crayon_sm_169"
+        tools:layout_editor_absoluteX="97dp"
+        tools:layout_editor_absoluteY="0dp"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineRetourV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.43" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineRetourH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <ImageButton
+        android:id="@+id/bouton_retour"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintEnd_toStartOf="@id/guidelineRetourV"
+        app:layout_constraintBottom_toTopOf="@id/guidelineRetourH"
+        android:alpha=".1"
+        />
+
+    <TextView
+        android:id="@+id/label_camarade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_camarade"
+        app:layout_constraintBottom_toTopOf="@id/guidelineRadioH"
+        app:layout_constraintStart_toStartOf="@id/guidelineInfos"
+        />
+
+    <TextView
+        android:id="@+id/identite_camarade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/guidelineInfos"
+        app:layout_constraintTop_toBottomOf="@id/label_camarade"
+        />
+
+    <TextView
+        android:id="@+id/label_nb_taches"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_nb_taches"
+        app:layout_constraintStart_toStartOf="@id/guidelineInfos"
+        app:layout_constraintTop_toBottomOf="@id/identite_camarade"
+        />
+
+    <TextView
+        android:id="@+id/nb_taches"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toStartOf="@id/guidelineInfos"
+        app:layout_constraintTop_toBottomOf="@id/label_nb_taches"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineRadioV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.55"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineRadioH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5"
+        />
+
+    <ImageButton
+        android:id="@+id/radio"
+        android:layout_width="168dp"
+        android:layout_height="138dp"
+        android:background="@drawable/radio"
+        app:layout_constraintStart_toStartOf="@+id/guidelineRadioV"
+        app:layout_constraintTop_toTopOf="@+id/guidelineRadioH"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineDossierV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.28"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineDossierH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.65"
+        />
+
+    <ImageButton
+        android:id="@+id/bouton_dossier"
+        android:layout_width="67dp"
+        android:layout_height="101dp"
+        android:background="@drawable/dossier"
+
+        app:layout_constraintStart_toStartOf="@+id/guidelineDossierV"
+        app:layout_constraintTop_toTopOf="@+id/guidelineDossierH"
+        />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineInfos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="40dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

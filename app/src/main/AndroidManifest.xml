@@ -25,6 +25,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".BureauActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".ListeCamaradesActivity"
             android:exported="false"
             android:screenOrientation="landscape" />

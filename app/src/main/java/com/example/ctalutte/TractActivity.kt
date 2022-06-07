@@ -14,6 +14,7 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ctalutte.Modele.ManagerScore
 import com.example.ctalutte.Modele.MyDragShadowBuilder
 import kotlin.CharSequence
 import kotlin.Long
@@ -40,12 +41,20 @@ class TractActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_distrib)
+
+        Outils.logPerso("modifierBDD", "activité tracts")
+
+        Outils.logPerso("taskManager", "avant startTask")
+        val tacheManager = ManagerScore(this)
+        tacheManager.startTask()
+        Outils.logPerso("taskManager", "après startTask")
+
         val tract = findViewById<ImageView>(R.id.drop_tract)
         val  frag = FragmentController(findViewById<TextView>(R.id.chrono),
                                         null,
                                         findViewById<TextView>(R.id.score_joueur),
                                         findViewById<TextView>(R.id.nom_tache),
-                                        25,
+                                        5,
                                         this,
                                         this)
 
@@ -85,6 +94,7 @@ class TractActivity : AppCompatActivity() {
         val receiverView: ImageView = v as ImageView
         val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
         val total = Integer.valueOf(getString(R.string.score))
+        val tacheManager = ManagerScore(this)
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
                 true
@@ -108,6 +118,7 @@ class TractActivity : AppCompatActivity() {
                 scoreJoueur.setText(score.toString())
                 if (score == total) {
                     Outils.toastCourt(applicationContext, "VICTOIRE !")
+                    tacheManager.stopTask(score)
                     compteur?.cancel()
                     finish()
                 }
@@ -138,6 +149,7 @@ class TractActivity : AppCompatActivity() {
         val poubListen = View.OnDragListener {v, event ->
         val receiverView:ImageView = v as ImageView
         val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
+        val tacheManager = ManagerScore(this)
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
 
@@ -164,6 +176,7 @@ class TractActivity : AppCompatActivity() {
                     score = -10
                     scoreJoueur.setText(score.toString())
                     Outils.toastLong(applicationContext,"TRICHEUR !!")
+                    tacheManager.stopTask(score)
                     compteur?.cancel()
                     finish()
                 }

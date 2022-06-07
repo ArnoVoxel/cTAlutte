@@ -1,5 +1,7 @@
 package com.example.ctalutte
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -10,6 +12,12 @@ class ListeCamaradesActivity : AppCompatActivity() {
     val DB_NAME = "lutte";
     val DB_VERSION = 1;
 
+    // constantes pour les sharedPreferences
+    val MES_PREFS = "dossier_camarade"
+    val KEY_NOM_PREFS = "nom_du_camarade"
+    val KEY_SESSION_OUVERTE = "session_active"
+    val KEY_NB_TACHES = "nb_taches_finies"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_liste_camarades)
@@ -19,20 +27,13 @@ class ListeCamaradesActivity : AppCompatActivity() {
             finish()
         })
 
-        Outils.logPerso("ListeCamarades", "entrée liste activity")
         //récupération de la liste des éléments en BDD
         val connexionBDD = GestionBDD(this, DB_NAME, null, DB_VERSION)
-        Outils.logPerso("ListeCamarades", "connexion BDD")
         var listeCamarades = connexionBDD.getListeInfosCamarades()
-        Outils.logPerso("ListeCamarades", "après récupération de la liste")
 
         var listeTemp = arrayListOf<String>()
 
         for(Camarade in listeCamarades){
-            var infoCamarade = "nom : " + Camarade.nomCamarade +", score : " + Camarade.scoreCamarade + ", taches terminées : " + Camarade.nb_taches
-            Outils.logPerso("Camarades",infoCamarade)
-
-
             Outils.logPerso("ListeCamaradeItem", Camarade.nomCamarade)
             listeTemp.add(Camarade.nomCamarade + ", score : "+Camarade.scoreCamarade + ", tâches terminées : " + Camarade.nb_taches)
         }
@@ -41,7 +42,26 @@ class ListeCamaradesActivity : AppCompatActivity() {
         Outils.logPerso("ListeCamaradeItem", listeTemp.toString())
         var tableauCamarades = findViewById<ListView>(R.id.tableau_camarades)
         tableauCamarades.adapter = adapterCamarades
-        //tableauCamarades.setOnItemClickListener(AdapterView.OnItemClickListener(onContextItemSelected()))
+
+        tableauCamarades.setOnItemClickListener{parent, view, position, id ->
+            val element = adapterCamarades.getItem(position)
+            val intent = Intent(this, BureauActivity::class.java)
+            Outils.logPerso("repriseTravail", element.toString())
+            intent.putExtra("camarade", element)
+
+            //récupération du nom issu de element
+            val nom = element.toString().substringBefore(",")
+            Outils.logPerso("repriseTravail", nom)
+
+            //ajout des éléments en prefs
+            val prefs = this?.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+            val prefsEditor = prefs.edit()
+            prefsEditor.putBoolean(KEY_SESSION_OUVERTE, true)
+            prefsEditor.putString(KEY_NOM_PREFS, nom)
+            prefsEditor.commit()
+
+            startActivity(intent)
+        }
 
     }
 }

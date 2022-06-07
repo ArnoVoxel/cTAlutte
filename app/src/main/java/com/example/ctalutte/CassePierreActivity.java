@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.example.ctalutte.Modele.ManagerScore;
 import com.github.jinatonic.confetti.CommonConfetti;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
@@ -30,7 +32,7 @@ import nl.dionsegijn.konfetti.compose.KonfettiViewKt;
 public class CassePierreActivity extends AppCompatActivity {
 
     CountDownTimer compteur;
-    public int decompte = 10;
+    public int decompte = 5;
 
     // constantes pour la connexion
     private final String DB_NAME = "lutte";
@@ -41,12 +43,19 @@ public class CassePierreActivity extends AppCompatActivity {
     private final String KEY_NOM_PREFS = "nom_du_camarade";
     private final String KEY_NB_TACHES = "nb_taches_finies";
 
+    final ManagerScore tacheManager = new ManagerScore(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_casse_pierre);
+
+        Outils.logPerso("modifierBDD", "activité pierres");
+
+        Outils.logPerso("taskManager", "avant startTask");
+        tacheManager.startTask();
+        Outils.logPerso("taskManager", "après startTask");
 
         //animation de la pierre
         View pierreShake = findViewById(R.id.image_pierre);
@@ -106,10 +115,14 @@ public class CassePierreActivity extends AppCompatActivity {
                     // MAJ des infos en BDD
                     GestionBDD connexionBDD = new GestionBDD(getApplicationContext(), DB_NAME, null, DB_VERSION);
                     SharedPreferences prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE);
+                    SharedPreferences.Editor prefsEditor = prefs.edit();
                     String nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE");
-                    connexionBDD.terminerTache(nomCamarade, 50);
 
                     // retour au mainActivity
+                    tacheManager.stopTask(score);
+                    prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade));
+                    prefsEditor.commit();
+
                     finish();
                 } else {
                     score++;
@@ -141,6 +154,7 @@ public class CassePierreActivity extends AppCompatActivity {
             }
             public void onFinish(){
                 Outils.toastCourt(getApplicationContext(), "Au GOULAG !");
+                tacheManager.stopTask(0);
                 finish();
             }
         }.start();

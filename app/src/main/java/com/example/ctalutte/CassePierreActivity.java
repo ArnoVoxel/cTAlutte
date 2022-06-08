@@ -120,7 +120,7 @@ public class CassePierreActivity extends AppCompatActivity {
                     String nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE");
 
                     // retour au mainActivity
-                    tacheManager.stopTask(score);
+                    tacheManager.stopTask((score+decompte));
                     prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade));
                     prefsEditor.commit();
 
@@ -130,9 +130,7 @@ public class CassePierreActivity extends AppCompatActivity {
                     TextView scoreJoueur = (TextView)findViewById(R.id.score_joueur);
                     scoreJoueur.setText(Integer.toString(score));
 
-
                     animation.start();
-
 
                     //particules
                     ViewGroup layoutPierres = (ViewGroup)findViewById(R.id.layout_pierres).getParent();
@@ -141,7 +139,6 @@ public class CassePierreActivity extends AppCompatActivity {
 
                     Outils.logPerso("Pierre", "touch position X "+ MotionEvent.AXIS_X);
                     Outils.logPerso("Pierre", "touch position Y "+ valeurY[0]);
-
                 }
             }
         });

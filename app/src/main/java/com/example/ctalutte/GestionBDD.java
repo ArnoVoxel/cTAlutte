@@ -140,7 +140,7 @@ public class GestionBDD extends SQLiteOpenHelper {
         Outils.logPerso("modifierBDD","après exécution de la requête");
     }
 
-    public void terminerTache(String nomCamarade, int nouveauScore){
+    public void terminerTache(String nomCamarade, int nouveauScore, boolean etatPartie){
         Outils.logPerso("modifierBDD", "début fct terminerTache");
         SQLiteDatabase db = getReadableDatabase();
         Outils.logPerso("modifierBDD","après getReadable");
@@ -151,19 +151,24 @@ public class GestionBDD extends SQLiteOpenHelper {
 
         db.execSQL(modifierTache);
         Outils.logPerso("modifierBDD","après tâche finie passée à oui");
-        modifierScoreNbTache(nomCamarade, nouveauScore);
+        modifierScoreNbTache(nomCamarade, nouveauScore,etatPartie);
         Outils.logPerso("modifierBDD","après nouveau Score et nb tâches incrémenté");
     }
 
-    public void modifierScoreNbTache(String nomCamarade, int nouveauScore){
+    public void modifierScoreNbTache(String nomCamarade, int nouveauScore, boolean etatPartie){
         SQLiteDatabase db = getReadableDatabase();
-
-        String nouveauScoreNbTache = "UPDATE "+TABLE_NAME+" SET "+SCORE+" = "+SCORE+" +'" +nouveauScore+"' ,"+ NB_TACHES+" = "+NB_TACHES+" +1\n" +
-                "WHERE "+NOM_JOUEUR+" = '"+ nomCamarade+"';";
-
+        String nouveauScoreNbTache="";
+        if(etatPartie) {
+             nouveauScoreNbTache = "UPDATE " + TABLE_NAME + " SET " + SCORE + " = " + SCORE + " +'" + nouveauScore + "' ," + NB_TACHES + " = " + NB_TACHES + " +1\n" +
+                    "WHERE " + NOM_JOUEUR + " = '" + nomCamarade + "';";
+        }else{
+             nouveauScoreNbTache = "UPDATE " + TABLE_NAME + " SET " + SCORE + " = " + SCORE + " +'" + nouveauScore + "' WHERE " + NOM_JOUEUR + " = '" + nomCamarade + "';";
+        }
         db.execSQL(nouveauScoreNbTache);
         db.close();
     }
+
+
 
 
 }

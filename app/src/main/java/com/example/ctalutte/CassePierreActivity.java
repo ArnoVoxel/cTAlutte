@@ -120,7 +120,7 @@ public class CassePierreActivity extends AppCompatActivity {
                     String nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE");
 
                     // retour au mainActivity
-                    tacheManager.stopTask((score+decompte));
+                    tacheManager.stopTask((score+decompte),true);
                     prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade));
                     prefsEditor.commit();
 
@@ -152,7 +152,7 @@ public class CassePierreActivity extends AppCompatActivity {
             }
             public void onFinish(){
                 Outils.toastCourt(getApplicationContext(), "Au GOULAG !");
-                tacheManager.stopTask(0);
+                tacheManager.stopTask(0,false);
                 finish();
             }
         }.start();

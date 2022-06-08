@@ -152,7 +152,7 @@ class TractActivity : AppCompatActivity() {
                     val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
 
                     // retour au mainActivity
-                    tacheManager.stopTask((score + frag.decompte.toInt()))
+                    tacheManager.stopTask((score + frag.decompte.toInt()),true)
                     var connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
                     prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
                     prefsEditor.apply()
@@ -205,7 +205,7 @@ class TractActivity : AppCompatActivity() {
                     val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
 
                     // retour au mainActivity
-                    tacheManager.stopTask((score + frag.decompte.toInt()))
+                    tacheManager.stopTask((score + frag.decompte.toInt()),true)
                     var connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
                     prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
                     prefsEditor.apply()
@@ -215,7 +215,7 @@ class TractActivity : AppCompatActivity() {
                     score = -25
                     scoreJoueur.setText(score.toString())
                     Outils.toastLong(applicationContext,"TRICHEUR !!")
-                    tacheManager.stopTask(score)
+                    tacheManager.stopTask(score,false)
                     compteur?.cancel()
                     finish()
                 }

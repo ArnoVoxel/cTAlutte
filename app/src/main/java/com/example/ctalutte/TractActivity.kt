@@ -4,7 +4,6 @@ package com.example.ctalutte
 import FragmentController
 import android.content.ClipData
 import android.content.ClipDescription
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -16,13 +15,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ctalutte.Modele.ManagerScore
 import com.example.ctalutte.Modele.MyDragShadowBuilder
-import kotlin.CharSequence
-import kotlin.Long
-import kotlin.Suppress
-import kotlin.apply
-import kotlin.arrayOf
-
-
 
 
 class TractActivity : AppCompatActivity() {
@@ -30,7 +22,19 @@ class TractActivity : AppCompatActivity() {
     //Quelques variables
 
     var score = 0
-//    var compteur : CountDownTimer?=null
+
+    // constantes pour la connexion
+    private val DB_NAME = "lutte"
+    private val DB_VERSION = 1
+
+    // constantes pour les sharedPreferences
+    private val MES_PREFS = "dossier_camarade"
+    private val KEY_NOM_PREFS = "nom_du_camarade"
+    private val KEY_NB_TACHES = "nb_taches_finies"
+
+    val tacheManager = ManagerScore(this)
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         @Suppress("DEPRECATION")
@@ -45,7 +49,7 @@ class TractActivity : AppCompatActivity() {
         Outils.logPerso("modifierBDD", "activité tracts")
 
         Outils.logPerso("taskManager", "avant startTask")
-        val tacheManager = ManagerScore(this)
+
         tacheManager.startTask()
         Outils.logPerso("taskManager", "après startTask")
 
@@ -118,7 +122,16 @@ class TractActivity : AppCompatActivity() {
                 scoreJoueur.setText(score.toString())
                 if (score == total) {
                     Outils.toastCourt(applicationContext, "VICTOIRE !")
+                    // MAJ des infos en BDD
+                    val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+                    val prefsEditor = prefs.edit()
+                    val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
+
+                    // retour au mainActivity
                     tacheManager.stopTask(score)
+                    var connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
+                    prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
+                    prefsEditor.apply()
                     compteur?.cancel()
                     finish()
                 }
@@ -207,6 +220,8 @@ class TractActivity : AppCompatActivity() {
     fun testRegard(): Boolean{
         return false;
     }
+
+
 
 
 

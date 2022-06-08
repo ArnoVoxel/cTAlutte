@@ -3,6 +3,7 @@ package com.example.ctalutte
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.provider.MediaStore
 import android.view.View
 import android.view.WindowManager
@@ -25,6 +26,23 @@ class BureauActivity: AppCompatActivity() {
     //Pour gérer la musique
     var flag = false
 
+    //Pour la centrale
+    var decompteCentrale:Long = 0
+    val compteur = object : CountDownTimer(10000, 500) {
+        override fun onTick(millisUntilFinished: Long){
+            decompteCentrale = millisUntilFinished / 1000
+            if(millisUntilFinished < 5000 && millisUntilFinished >4500){
+                Outils.toastCourt(applicationContext, "Il reste : " + decompteCentrale.toString() + " secondes avant BOOM")
+            }
+            Outils.logPerso("compteur",decompteCentrale.toString())
+        }
+
+        override fun onFinish() {
+            Outils.toastCourt(applicationContext,"Fin")
+
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +50,7 @@ class BureauActivity: AppCompatActivity() {
         onBackPressed()
         abonnerBoutons()
         afficherInfosCamarade()
+        compteur.start()
     }
 
     /**
@@ -67,8 +86,11 @@ class BureauActivity: AppCompatActivity() {
                 1 -> startActivity(intentTract)
                 2 -> startActivity(intentPierre)
             }
-
         })
+        //Abonnement bouton centrale
+        var boutonCentrale = findViewById<Button>(R.id.bouton_central)
+        boutonCentrale.setOnClickListener(View.OnClickListener { refroidirCentrale(compteur) },)
+
 
         var boutonRetour = findViewById<ImageButton>(R.id.bouton_retour)
         boutonRetour.setOnClickListener(View.OnClickListener {
@@ -115,13 +137,17 @@ class BureauActivity: AppCompatActivity() {
         afficherInfosCamarade()
     }
 
-//    fun gererChanson(chanson:MediaPlayer){
-//        if(flag == false){
-//            chanson.start()
-//            flag = true;
-//        } else {
-//            chanson.stop()
-//            flag = false;
-//        }
-//    }
+    fun refroidirCentrale(compteur :CountDownTimer){
+        Outils.logPerso("compteur","avant cancel")
+        if(decompteCentrale > 5)
+        {
+            Outils.toastCourt(this,"Trop tôt !")
+        } else {
+            compteur.cancel()
+            compteur.start()
+        }
+
+    }
+
+
 }

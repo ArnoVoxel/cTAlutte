@@ -55,8 +55,8 @@ class BureauActivity: AppCompatActivity() {
         var boutonDossier = findViewById<ImageButton>(R.id.bouton_dossier)
         boutonDossier.setOnClickListener(View.OnClickListener {
 
-            val intentTract = Intent(this, TractActivity::class.java)
-            val intentPierre = Intent(this, CassePierreActivity::class.java)
+            val intentTract = Intent(this, EscapeActivity::class.java)
+            val intentPierre = Intent(this, EscapeActivity::class.java)
 
             Outils.toastCourt(this, "Tu vas bosser fidèle Camarade")
 

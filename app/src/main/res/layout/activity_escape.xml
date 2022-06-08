@@ -1,30 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    app:layoutDescription="@xml/activity_escape_scene"
+    tools:context=".EscapeActivity">
 
-    <FrameLayout
-        android:id="@+id/frameLayoutEscape"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/backgroundEscape1"
-        app:srcCompat="@drawable/background_runner1"
-        android:scaleType="fitXY"
-        />
-
-    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/backgroundEscape2"
-        app:srcCompat="@drawable/background_runner2"
-        android:scaleType="fitXY"
-        />
+        android:background="@drawable/background_runner1" />
 
-    </FrameLayout>
+    <!--<ImageView
+        android:id="@+id/backgroundEscape2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/background_runner2" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,27 +2,26 @@ package com.example.ctalutte
 
 
 import FragmentController
+import android.animation.ObjectAnimator
 import android.content.ClipData
 import android.content.ClipDescription
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.DragEvent
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.RotateAnimation
+import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.translationMatrix
 import com.example.ctalutte.Modele.ManagerScore
 import com.example.ctalutte.Modele.MyDragShadowBuilder
-import kotlin.CharSequence
-import kotlin.Long
-import kotlin.Suppress
-import kotlin.apply
-import kotlin.arrayOf
-
-
+import pl.droidsonroids.gif.GifImageView
 
 
 class TractActivity : AppCompatActivity() {
@@ -30,7 +29,22 @@ class TractActivity : AppCompatActivity() {
     //Quelques variables
 
     var score = 0
-//    var compteur : CountDownTimer?=null
+    var flag = false
+
+    // constantes pour la connexion
+    private val DB_NAME = "lutte"
+    private val DB_VERSION = 1
+
+    // constantes pour les sharedPreferences
+    private val MES_PREFS = "dossier_camarade"
+    private val KEY_NOM_PREFS = "nom_du_camarade"
+    private val KEY_NB_TACHES = "nb_taches_finies"
+
+    val tacheManager = ManagerScore(this)
+    val animator = ObjectAnimator()
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         @Suppress("DEPRECATION")
@@ -41,20 +55,13 @@ class TractActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_distrib)
-
-        Outils.logPerso("modifierBDD", "activité tracts")
-
-        Outils.logPerso("taskManager", "avant startTask")
-        val tacheManager = ManagerScore(this)
         tacheManager.startTask()
-        Outils.logPerso("taskManager", "après startTask")
-
         val tract = findViewById<ImageView>(R.id.drop_tract)
         val  frag = FragmentController(findViewById<TextView>(R.id.chrono),
                                         null,
                                         findViewById<TextView>(R.id.score_joueur),
                                         findViewById<TextView>(R.id.nom_tache),
-                                        5,
+                                        10,
                                         this,
                                         this)
 
@@ -69,7 +76,6 @@ class TractActivity : AppCompatActivity() {
                     view.tag as? CharSequence,
                     arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN), item
                 )
-
                 val myShadow = MyDragShadowBuilder(this)
                 view.startDragAndDrop(
                     dragData,
@@ -83,9 +89,50 @@ class TractActivity : AppCompatActivity() {
         val poubListen = createListenerPoubelle(compteur)
         val poubelle = findViewById<ImageView>(R.id.poubelle)
         poubelle.setOnDragListener(poubListen)
+
+
         val bonhommeListen = createListenerCamarade(compteur)
         val bonhomme = findViewById<pl.droidsonroids.gif.GifImageView>(R.id.bonhomme)
+
+
+        //Animation
+//        animationBonhomme(bonhomme)
+        ObjectAnimator.ofFloat(bonhomme,"translationX",1000f).apply {
+            duration = 5000
+            Outils.logPerso("rotation","rotation 1")
+            Outils.logPerso("rotation",bonhomme.getRotationY().toString())
+            start()
+        }
+        ObjectAnimator.ofFloat(bonhomme,"rotationY",180f).apply {
+            duration = 10
+            startDelay=5000
+
+            Outils.logPerso("rotation","rotation 2")
+            Outils.logPerso("rotation",bonhomme.getRotationY().toString())
+
+            start()
+        }
+        ObjectAnimator.ofFloat(bonhomme,"translationX",0f).apply {
+            duration =5000
+            startDelay = 5010
+            Outils.logPerso("rotation","rotation 3")
+            Outils.logPerso("rotation",bonhomme.getRotationY().toString())
+            start()
+        }
+
         bonhomme.setOnDragListener(bonhommeListen)
+
+//        val rotate = RotateAnimation(0F,100F,90F,50F)
+//        rotate.setDuration(100)
+//        rotate.apply { bonhomme }
+//        bonhomme.startAnimation(rotate)
+//        bonhomme.startAnimation(moveLeftToRight)
+
+//        bonhomme.postOnAnimation({
+//            rotate.apply { bonhomme }
+//            bonhomme.startAnimation(rotate)
+//            moveRighToLeft.apply { bonhomme }
+//            bonhomme.startAnimation(moveRighToLeft)})
     }
 
 //Event listener camarade :
@@ -100,25 +147,31 @@ class TractActivity : AppCompatActivity() {
                 true
             }
             DragEvent.ACTION_DRAG_ENTERED -> {
-                receiverView.setBackgroundColor(Color.RED)
-                v.invalidate()
+//                v.invalidate()
                 true
             }
             DragEvent.ACTION_DRAG_LOCATION ->
                 true
             DragEvent.ACTION_DRAG_EXITED -> {
-                receiverView.setBackgroundColor(Color.GREEN)
-                v.invalidate()
+//                v.invalidate()
                 true
             }
             DragEvent.ACTION_DROP -> {
                 val item: ClipData.Item = event.clipData.getItemAt(0)
-                receiverView.setBackgroundColor(Color.BLACK)
                 score += 5
                 scoreJoueur.setText(score.toString())
-                if (score == total) {
+                if (score >= total) {
                     Outils.toastCourt(applicationContext, "VICTOIRE !")
+                    // MAJ des infos en BDD
+                    val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+                    val prefsEditor = prefs.edit()
+                    val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
+
+                    // retour au mainActivity
                     tacheManager.stopTask(score)
+                    var connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
+                    prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
+                    prefsEditor.apply()
                     compteur?.cancel()
                     finish()
                 }
@@ -126,15 +179,7 @@ class TractActivity : AppCompatActivity() {
                 true
             }
             DragEvent.ACTION_DRAG_ENDED -> {
-                receiverView.setBackgroundColor(Color.DKGRAY)
                 v.invalidate()
-                when (event.result) {
-                    true ->
-                        receiverView.setBackgroundColor(Color.DKGRAY)
-                    else -> {
-                        receiverView.setBackgroundColor(Color.GREEN)
-                    }
-                }
                 true
             }
             else -> {
@@ -156,44 +201,45 @@ class TractActivity : AppCompatActivity() {
                 true
             }
             DragEvent.ACTION_DRAG_ENTERED -> {
-                receiverView.setBackgroundColor(Color.BLUE)
                 v.invalidate()
                 true
             }
             DragEvent.ACTION_DRAG_LOCATION ->
                 true
             DragEvent.ACTION_DRAG_EXITED -> {
-                receiverView.setBackgroundColor(Color.BLACK)
                 v.invalidate()
                 true
             }
             DragEvent.ACTION_DROP -> {
                 val item: ClipData.Item = event.clipData.getItemAt(0)
                 if(testRegard()){
-                    score +=10
-                    scoreJoueur.setText(score.toString())}
+                    score = 25
+                    Outils.toastCourt(applicationContext, "VICTOIRE !")
+                    // MAJ des infos en BDD
+                    val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+                    val prefsEditor = prefs.edit()
+                    val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
+
+                    // retour au mainActivity
+                    tacheManager.stopTask(score)
+                    var connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
+                    prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
+                    prefsEditor.apply()
+                    compteur?.cancel()
+                    finish()}
                 else{
-                    score = -10
+                    score = -25
                     scoreJoueur.setText(score.toString())
                     Outils.toastLong(applicationContext,"TRICHEUR !!")
                     tacheManager.stopTask(score)
                     compteur?.cancel()
                     finish()
                 }
-                receiverView.setBackgroundColor(Color.CYAN)
                 v.invalidate()
                 true
             }
             DragEvent.ACTION_DRAG_ENDED -> {
-                receiverView.setBackgroundColor(Color.DKGRAY)
                 v.invalidate()
-                when(event.result) {
-                    true ->
-                        receiverView.setBackgroundColor(Color.DKGRAY)
-                    else ->{
-                        receiverView.setBackgroundColor(Color.GREEN)
-                    }
-                }
                 true
             }
             else -> {
@@ -205,9 +251,24 @@ class TractActivity : AppCompatActivity() {
     }
 
     fun testRegard(): Boolean{
-        return false;
+
+        val bonhomme = findViewById<pl.droidsonroids.gif.GifImageView>(R.id.bonhomme)
+        if(bonhomme.getRotationY().toString() == "180.0"){
+            Outils.logPerso("rotation",bonhomme.getRotationY().toString())
+            return true
+        }else {
+            Outils.logPerso("rotation",bonhomme.getRotationY().toString())
+
+            return false;
+        }
+
     }
 
 
 
+
 }
+
+//private fun GifImageView.postOnAnimation(startAnimation: Unit) {
+//
+//}

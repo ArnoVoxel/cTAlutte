@@ -5,6 +5,7 @@ import com.example.ctalutte.Outils
 
 import android.app.Activity
 import android.content.Context
+import android.content.IntentSender
 import android.os.CountDownTimer
 import android.text.Layout
 import android.widget.ImageView
@@ -25,21 +26,20 @@ import com.example.ctalutte.R
 fun timer(): CountDownTimer {
 //var compteur = getCompteur()
  compteur = object : CountDownTimer(decompte*1000, 1000) {
-  override fun onTick(millisUntilFinished: Long) {
-   chronoTache?.setText(decompte.toString())
+      override fun onTick(millisUntilFinished: Long) {
+           chronoTache?.setText(decompte.toString())
+           decompte--
+      }
+      override fun onFinish() {
+          Outils.toastCourt(context, "Au GOULAG !")
+          activity?.finish()
+      }
 
-      decompte--
+     fun getDecompte(decompte: Int): Int {
+         return decompte
+     }
 
-  }
-
-  override fun onFinish() {
-
-      Outils.toastCourt(context, "Au GOULAG !")
-
-//      getActivity().finish()
-      activity?.finish()
-  }
- }.start()
+     }.start()
     return compteur as CountDownTimer
 }
 
@@ -52,5 +52,7 @@ fun affichage(score:Int){
  nomTache?.setText(R.string.tache_tract)
  scoreJoueur?.setText(score.toString())
 }
+
+
 
 }

@@ -228,7 +228,7 @@ class TractActivity : AppCompatActivity() {
                     compteur?.cancel()
                     finish()}
                 else{
-                    score = -10
+                    score = -25
                     scoreJoueur.setText(score.toString())
                     Outils.toastLong(applicationContext,"TRICHEUR !!")
                     tacheManager.stopTask(score)

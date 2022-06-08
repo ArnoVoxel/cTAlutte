@@ -32,7 +32,7 @@ import nl.dionsegijn.konfetti.compose.KonfettiViewKt;
 public class CassePierreActivity extends AppCompatActivity {
 
     CountDownTimer compteur;
-    public int decompte = 5;
+    public int decompte = 10;
 
     // constantes pour la connexion
     private final String DB_NAME = "lutte";
@@ -109,6 +109,7 @@ public class CassePierreActivity extends AppCompatActivity {
 
                 if(score == total){
                     Outils.toastCourt(getApplicationContext(), "RALACHO TAVARICH !");
+                    boutonPierre.setOnClickListener(null);
                     // RAZ du décompte de la tâche
                     compteur.cancel();
 

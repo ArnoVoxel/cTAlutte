@@ -6,13 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/fond_centrale"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/vue_exterieure"
+        tools:layout_editor_absoluteX="97dp"
+        tools:layout_editor_absoluteY="0dp"
+        />
+
 
     <ImageView
         android:id="@+id/fond_bureau"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/fond_crayon_sm_169"
+        android:src="@drawable/background_sm_169_vide"
         tools:layout_editor_absoluteX="97dp"
         tools:layout_editor_absoluteY="0dp"
         />
@@ -29,15 +39,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3" />
+        app:layout_constraintGuide_percent="0.35" />
 
     <ImageButton
         android:id="@+id/bouton_retour"
-        android:layout_width="150dp"
+        android:layout_width="130dp"
         android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:background="@drawable/cadre_poing"
         app:layout_constraintEnd_toStartOf="@id/guidelineRetourV"
         app:layout_constraintBottom_toTopOf="@id/guidelineRetourH"
-        android:alpha=".1"
         />
 
     <TextView

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/motionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EscapeActivity">
-
-
 
     <ImageView
         android:id="@+id/backgroundEscape1"
@@ -62,6 +61,14 @@
     app:layout_constraintEnd_toStartOf="@+id/guidelineAvant"
     app:layout_constraintStart_toStartOf="@+id/guidelineArriere"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/obstacle_layout"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
     <fragment
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -69,6 +76,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:name="com.example.ctalutte.MenuFragment"
         />
+
     <Button
     android:id="@+id/retourEscape"
     android:layout_width="wrap_content"

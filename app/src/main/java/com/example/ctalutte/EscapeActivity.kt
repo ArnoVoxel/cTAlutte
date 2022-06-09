@@ -28,13 +28,6 @@ class EscapeActivity: AppCompatActivity() {
             this,
             this)
 
-        // création des obstacles
-        val mainLayout = findViewById<LinearLayout>(R.id.motionLayout)
-
-        var obstacleVue = layoutInflater.inflate(R.layout.activity_escape_obstacles, mainLayout, false)
-
-        mainLayout.addView(obstacleVue)
-
 
         var buttonReturn = findViewById<Button>(R.id.retourEscape)
         buttonReturn.setOnClickListener(View.OnClickListener {
@@ -56,6 +49,8 @@ class EscapeActivity: AppCompatActivity() {
         animateBackground(R.id.backgroundEscape1, R.anim.escape_background_animation1)
         animateBackground(R.id.backgroundEscape2, R.anim.escape_background_animation2)
 
+        //animateObstacle(R.id.obstacle_layout, R.anim.escape_obstacle_bas)
+
     }
 
     fun animateBackground(background: Int, animationXML: Int) {
@@ -69,5 +64,24 @@ class EscapeActivity: AppCompatActivity() {
         val vueJoueur = findViewById<GifImageView>(joueur)
         positionBonhomme = "haut"
         vueJoueur.startAnimation(animJump)
+        createObstacle()
+    }
+
+    fun animateObstacle(animationXML: Int){
+        val animObstacle = AnimationUtils.loadAnimation(this, animationXML)
+        val vueObstacle = findViewById<LinearLayout>(R.id.obstacle_layout)
+        vueObstacle.startAnimation(animObstacle)
+    }
+
+    fun createObstacle(){
+        /*var obstacle : Int = R.layout.activity_escape_obstacles
+        setContentView(obstacle)*/
+
+        // création des obstacles
+        val mainLayout = findViewById<LinearLayout>(R.id.obstacle_layout)
+        var obstacleVue = layoutInflater.inflate(R.layout.activity_escape_obstacles, mainLayout, false)
+
+        mainLayout.addView(obstacleVue)
+        animateObstacle(R.anim.escape_obstacle_haut)
     }
 }

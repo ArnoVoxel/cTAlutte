@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/obstacle_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:id="@+id/obstacle"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/obstacle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            android:src="@drawable/pierre"
+            android:maxWidth="120dp"
+            android:maxHeight="120dp"
+            android:minHeight="90dp"
+            android:minWidth="90dp"
+            />
+
     </LinearLayout>
 
-</LinearLayout>

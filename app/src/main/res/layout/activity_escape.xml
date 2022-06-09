@@ -8,16 +8,19 @@
     tools:context=".EscapeActivity">
 
 
+
     <ImageView
         android:id="@+id/backgroundEscape1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/menuFragment"
         android:background="@drawable/background_runner" />
 
     <ImageView
         android:id="@+id/backgroundEscape2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/menuFragment"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/background_runner" />
 
@@ -59,7 +62,13 @@
     app:layout_constraintEnd_toStartOf="@+id/guidelineAvant"
     app:layout_constraintStart_toStartOf="@+id/guidelineArriere"/>
 
-
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/menuFragment"
+        app:layout_constraintTop_toTopOf="parent"
+        android:name="com.example.ctalutte.MenuFragment"
+        />
     <Button
     android:id="@+id/retourEscape"
     android:layout_width="wrap_content"
@@ -69,7 +78,6 @@
     android:text="RETOUR"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

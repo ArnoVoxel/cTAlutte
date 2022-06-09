@@ -1,11 +1,14 @@
 package com.example.ctalutte
 
+import FragmentController
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import pl.droidsonroids.gif.GifImageView
 
@@ -17,6 +20,20 @@ class EscapeActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_escape)
 
+        val  frag = FragmentController(findViewById<TextView>(R.id.chrono),
+            null,
+            findViewById<TextView>(R.id.score_joueur),
+            findViewById<TextView>(R.id.nom_tache),
+            10,
+            this,
+            this)
+
+        // création des obstacles
+        val mainLayout = findViewById<LinearLayout>(R.id.motionLayout)
+
+        var obstacleVue = layoutInflater.inflate(R.layout.activity_escape_obstacles, mainLayout, false)
+
+        mainLayout.addView(obstacleVue)
 
 
         var buttonReturn = findViewById<Button>(R.id.retourEscape)
@@ -48,12 +65,6 @@ class EscapeActivity: AppCompatActivity() {
     }
 
     fun animateBonhomme(joueur: Int, animationXML: Int){
-        /*ObjectAnimator.ofFloat(joueur, "translationY", 1000f).apply {
-            duration = 500
-            start()
-            Outils.logPerso("animationEscape", "dans le objectanimator")
-        }
-        Outils.logPerso("animationEscape", "dehors le objectanimator")*/
         val animJump = AnimationUtils.loadAnimation(this, animationXML)
         val vueJoueur = findViewById<GifImageView>(joueur)
         positionBonhomme = "haut"

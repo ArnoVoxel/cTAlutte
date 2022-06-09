@@ -33,6 +33,7 @@ public class CassePierreActivity extends AppCompatActivity {
 
     CountDownTimer compteur;
     public int decompte = 10;
+    public int score = 0;
 
     // constantes pour la connexion
     private final String DB_NAME = "lutte";
@@ -42,8 +43,10 @@ public class CassePierreActivity extends AppCompatActivity {
     private final String MES_PREFS = "dossier_camarade";
     private final String KEY_NOM_PREFS = "nom_du_camarade";
     private final String KEY_NB_TACHES = "nb_taches_finies";
+    private final String KEY_TEMPSCENTRALE = "key_temps_centrale";
 
     final ManagerScore tacheManager = new ManagerScore(this);
+    final Long tempsActivity =10L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,8 +113,10 @@ public class CassePierreActivity extends AppCompatActivity {
                 if(score == total){
                     Outils.toastCourt(getApplicationContext(), "RALACHO TAVARICH !");
                     boutonPierre.setOnClickListener(null);
+                    score = score + decompte;
+                    backToOffice(true);
                     // RAZ du décompte de la tâche
-                    compteur.cancel();
+        /*            compteur.cancel();
 
                     // MAJ des infos en BDD
                     GestionBDD connexionBDD = new GestionBDD(getApplicationContext(), DB_NAME, null, DB_VERSION);
@@ -124,7 +129,7 @@ public class CassePierreActivity extends AppCompatActivity {
                     prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade));
                     prefsEditor.commit();
 
-                    finish();
+                    finish();*/
                 } else {
                     score++;
                     TextView scoreJoueur = (TextView)findViewById(R.id.score_joueur);
@@ -145,15 +150,17 @@ public class CassePierreActivity extends AppCompatActivity {
 
         //intégration du timer
         TextView chronoTache = (TextView) findViewById(R.id.chrono);
-        compteur = new CountDownTimer(10000, 1000){
+        compteur = new CountDownTimer(tempsActivity*1000, 1000){
             public void onTick(long millisUntilFinished){
                 chronoTache.setText(String.valueOf(decompte));
                 decompte--;
             }
             public void onFinish(){
                 Outils.toastCourt(getApplicationContext(), "Au GOULAG !");
-                tacheManager.stopTask(0,false);
-                finish();
+                score = -25;
+                backToOffice(false);
+//                tacheManager.stopTask(0,false);
+//                finish();
             }
         }.start();
 
@@ -161,9 +168,28 @@ public class CassePierreActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        compteur.cancel();
         Outils.toastCourt(getApplicationContext(), "Au GOULAG !");
-        tacheManager.stopTask(-25,false);
+        score = -25;
+        backToOffice(false);
+//        compteur.cancel();
+//        tacheManager.stopTask(-25,false);
+//        finish();
+    }
+
+    public void backToOffice (Boolean flagVictoire){
+       SharedPreferences prefs= getSharedPreferences(MES_PREFS,MODE_PRIVATE);
+       SharedPreferences.Editor prefsEditor = prefs.edit();
+       Long tempsBureau = prefs.getLong(KEY_TEMPSCENTRALE,0L);
+       Long resultTemps = tempsBureau - decompte;
+       String nomCamarade = prefs.getString(KEY_NOM_PREFS,"CAMARADE");
+       tacheManager.stopTask(score,flagVictoire);
+       GestionBDD connexionBDD= new GestionBDD(this,DB_NAME,null,DB_VERSION);
+       if(flagVictoire){
+           prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade));
+       }
+        prefsEditor.putLong(KEY_TEMPSCENTRALE,resultTemps);
+        prefsEditor.apply();
+        compteur.cancel();
         finish();
     }
 }

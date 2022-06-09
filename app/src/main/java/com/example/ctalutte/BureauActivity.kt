@@ -96,8 +96,8 @@ class BureauActivity: AppCompatActivity() {
             Outils.logPerso("randomActivity", randomValue.toString())
 
             when(randomValue){
-                1 -> startActivity(intentTract)
-                2 -> startActivity(intentTract)
+                1 -> startActivity(intentPierre)
+                2 -> startActivity(intentPierre)
             }
         })
         //Abonnement bouton centrale

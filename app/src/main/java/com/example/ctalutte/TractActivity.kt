@@ -40,14 +40,12 @@ class TractActivity : AppCompatActivity() {
     private val MES_PREFS = "dossier_camarade"
     private val KEY_NOM_PREFS = "nom_du_camarade"
     private val KEY_NB_TACHES = "nb_taches_finies"
+    private val KEY_TEMPSCENTRALE = "key_temps_centrale"
 
     val tacheManager = ManagerScore(this)
     val animator = ObjectAnimator()
-    var decompte :Long = 10
-
-
-
-
+    val tempsActivity :Long = 10
+    var decompte :Long = tempsActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         @Suppress("DEPRECATION")
@@ -60,12 +58,8 @@ class TractActivity : AppCompatActivity() {
         setContentView(R.layout.activity_distrib)
         tacheManager.startTask()
         val tract = findViewById<ImageView>(R.id.drop_tract)
-        val  frag = FragmentController(findViewById<TextView>(R.id.chrono),
-                                        null,
-                                        findViewById<TextView>(R.id.score_joueur),
+        val  frag = FragmentController( findViewById<TextView>(R.id.score_joueur),
                                         findViewById<TextView>(R.id.nom_tache),
-                                        10,
-                                        this,
                                         this)
 
         val chronoTache = findViewById<TextView>(R.id.chrono)
@@ -145,6 +139,7 @@ class TractActivity : AppCompatActivity() {
         val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
         val total = Integer.valueOf(getString(R.string.score))
         val tacheManager = ManagerScore(this)
+
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
                 true
@@ -171,11 +166,17 @@ class TractActivity : AppCompatActivity() {
                     val prefsEditor = prefs.edit()
                     val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
 
+                    //Gestion temps centrale
+                    val tempsBureau = prefs.getLong(KEY_TEMPSCENTRALE,0)
+                    val resultTemps = tempsBureau-((tempsActivity * 1000) - (decompte * 1000))
+
                     // retour au mainActivity
-                    tacheManager.stopTask((score + frag.decompte.toInt()),true)
+                    tacheManager.stopTask((score + decompte.toInt()),true)
                     var connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
                     prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
+                    prefsEditor.putLong(KEY_TEMPSCENTRALE,resultTemps)
                     prefsEditor.apply()
+                    tacheManager.stopTask(score,true)
                     compteur?.cancel()
                     finish()
                 }
@@ -216,34 +217,45 @@ class TractActivity : AppCompatActivity() {
             }
             DragEvent.ACTION_DROP -> {
                 val item: ClipData.Item = event.clipData.getItemAt(0)
+                val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+                val prefsEditor = prefs.edit()
+                val tempsBureau = prefs.getLong(KEY_TEMPSCENTRALE,0)
+                val resultTemps = tempsBureau-((tempsActivity * 1000) - (decompte * 1000))
+                Outils.logPerso("TestCompteur","ResultTemps: " + resultTemps.toString() + " tempsActi: " + tempsActivity.toString() + " decompte: " + decompte.toString())
+                var connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
+                var flag = false
+
                 if(testRegard()){
-                    score = 25
+                    score = 25 + decompte.toInt()
                     Outils.toastCourt(applicationContext, "VICTOIRE !")
                     // MAJ des infos en BDD
-                    val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
-                    val prefsEditor = prefs.edit()
+
                     val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
+                    flag = true
 
                     // retour au mainActivity
-                    tacheManager.stopTask((score + frag.decompte.toInt()),true)
-                    var connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
+
                     prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
-                    prefsEditor.apply()
-                    compteur?.cancel()
-                    finish()}
+
+                    }
                 else{
                     score = -25
                     scoreJoueur.setText(score.toString())
                     Outils.toastLong(applicationContext,"TRICHEUR !!")
-                    tacheManager.stopTask(score,false)
-                    compteur?.cancel()
-                    finish()
+
+
                 }
-                v.invalidate()
+
+                prefsEditor.putLong(KEY_TEMPSCENTRALE,resultTemps)
+                prefsEditor.apply()
+                tacheManager.stopTask(score,flag)
+                compteur?.cancel()
+                finish()
+//                v.invalidate()
                 true
             }
             DragEvent.ACTION_DRAG_ENDED -> {
-                v.invalidate()
+//                v.invalidate()
                 true
             }
             else -> {
@@ -266,18 +278,25 @@ class TractActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed(){
+        //Gestion du score
         val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
         score = -25
         scoreJoueur.setText(score.toString())
+
+        //Gestion temps centrale
+        val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+        val prefsEditor = prefs.edit()
+        val tempsBureau = prefs.getLong(KEY_TEMPSCENTRALE,0)
+        val resultTemps = tempsBureau-decompte
+        prefsEditor.putLong(KEY_TEMPSCENTRALE,resultTemps)
+        prefsEditor.apply()
+
+        //Retour au bureauActivity
         Outils.toastLong(applicationContext,"La fuite est une insulte au Parti !!")
         tacheManager.stopTask(score,false)
         compteur.cancel()
         finish()
 
     }
-
 }
 
-//private fun GifImageView.postOnAnimation(startAnimation: Unit) {
-//
-//}

@@ -22,34 +22,39 @@ class BureauActivity: AppCompatActivity() {
     val KEY_SESSION_OUVERTE = "session_active"
     val KEY_NB_TACHES = "nb_taches_finies"
     val KEY_FLAG = "key_flag"
+    val KEY_TEMPSCENTRALE = "key_temps_centrale"
 
     //Pour gérer la musique
     var flag = false
 
     //Pour la centrale
     var decompteCentrale:Long = 0
-    val compteur = object : CountDownTimer(50000, 1000) {
-        override fun onTick(millisUntilFinished: Long){
-            decompteCentrale = millisUntilFinished / 1000
-            if(millisUntilFinished < 10000 && millisUntilFinished >9500){
-                Outils.toastCourt(applicationContext, "Il reste : " + decompteCentrale.toString() + " secondes avant BOOM")
-            }
-            Outils.logPerso("compteur",decompteCentrale.toString())
-        }
+    lateinit var thermo : ImageView
+    var tempsCompteur:Long = 50000
+    lateinit var compteur  : CountDownTimer
 
-        override fun onFinish() {
-            Outils.toastCourt(applicationContext,"Fin")
 
-        }
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bureau)
+        thermo = findViewById(R.id.temperature_central)
         onBackPressed()
         abonnerBoutons()
         afficherInfosCamarade()
+        compteur = object : CountDownTimer(tempsCompteur, 1000) {
+            override fun onTick(millisUntilFinished: Long){
+                decompteCentrale = millisUntilFinished / 1000
+                fondCentrale(decompteCentrale)
+                Outils.logPerso("compteur",decompteCentrale.toString())
+
+            }
+            override fun onFinish() {
+                Outils.toastCourt(applicationContext,"Fin")
+
+            }
+        }
         compteur.start()
     }
 
@@ -73,7 +78,15 @@ class BureauActivity: AppCompatActivity() {
         //abonnement bouton dossier
         var boutonDossier = findViewById<ImageButton>(R.id.bouton_dossier)
         boutonDossier.setOnClickListener(View.OnClickListener {
+            //Gestion temps restant centrale :
+            val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+            val prefsEditor = prefs.edit()
+            prefsEditor.putLong(KEY_TEMPSCENTRALE,(decompteCentrale * 1000))
+            prefsEditor.apply()
+            compteur.cancel()
 
+
+            //Gestion choix activité
             val intentTract = Intent(this, TractActivity::class.java)
             val intentPierre = Intent(this, CassePierreActivity::class.java)
 
@@ -83,18 +96,23 @@ class BureauActivity: AppCompatActivity() {
             Outils.logPerso("randomActivity", randomValue.toString())
 
             when(randomValue){
-                1 -> startActivity(intentPierre)
-                2 -> startActivity(intentPierre)
+                1 -> startActivity(intentTract)
+                2 -> startActivity(intentTract)
             }
         })
         //Abonnement bouton centrale
         var boutonCentrale = findViewById<Button>(R.id.bouton_central)
-        boutonCentrale.setOnClickListener(View.OnClickListener { refroidirCentrale(compteur) },)
+        boutonCentrale.setOnClickListener(View.OnClickListener { refroidirCentrale() },)
 
 
         var boutonRetour = findViewById<ImageButton>(R.id.bouton_retour)
         boutonRetour.setOnClickListener(View.OnClickListener {
             val intent = Intent(this, MainActivity::class.java)
+            val connexionBDD = GestionBDD(this, DB_NAME, null, DB_VERSION)
+            val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+            val prefsEditor = prefs.edit()
+            connexionBDD.setTempsCentrale(prefs.getString(KEY_NOM_PREFS,"CAMARADE"),(decompteCentrale*1000).toInt())
+            compteur.cancel()
             startActivity(intent)
         })
     }
@@ -117,7 +135,7 @@ class BureauActivity: AppCompatActivity() {
         // ajout du nombre de tâches réalisées
 
         prefsEditor.putInt(KEY_NB_TACHES,connexionBDD.getNbTaches(nomMurCamarade))
-        prefsEditor.commit()
+        prefsEditor.apply()
 
 
         // ajout du nb de tâches finies dans le TextView
@@ -135,19 +153,72 @@ class BureauActivity: AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         afficherInfosCamarade()
+        compteur.cancel()
+        tempsCompteur = resumeCentrale()
+        Outils.logPerso("TestCompteur",tempsCompteur.toString())
+        compteur = object : CountDownTimer(tempsCompteur, 1000) {
+            override fun onTick(millisUntilFinished: Long){
+                decompteCentrale = millisUntilFinished / 1000
+                fondCentrale(decompteCentrale)
+                Outils.logPerso("compteur",decompteCentrale.toString())
+
+            }
+            override fun onFinish() {
+                Outils.toastCourt(applicationContext,"Fin")
+
+            }
+        }
+        compteur.start()
+
     }
 
-    fun refroidirCentrale(compteur :CountDownTimer){
+    fun refroidirCentrale(){
         Outils.logPerso("compteur","avant cancel")
-        if(decompteCentrale > 5)
+        if(decompteCentrale > 10)
         {
             Outils.toastCourt(this,"Trop tôt !")
         } else {
+            thermo.setImageDrawable(getDrawable(R.drawable.thermometre_base))
             compteur.cancel()
+            tempsCompteur = 50000
+            compteur = object : CountDownTimer(tempsCompteur, 1000) {
+                override fun onTick(millisUntilFinished: Long){
+                    decompteCentrale = millisUntilFinished / 1000
+                    fondCentrale(decompteCentrale)
+                    Outils.logPerso("compteur",decompteCentrale.toString())
+
+                }
+                override fun onFinish() {
+                    Outils.toastCourt(applicationContext,"Fin")
+
+                }
+            }
             compteur.start()
         }
 
     }
 
+    fun resumeCentrale():Long{
+        val prefs = this.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+//        val tempsRestant = prefs.getLong(KEY_TEMPSCENTRALE,50000)
+        val connexionBDD = GestionBDD(this, DB_NAME, null, DB_VERSION)
+        val tempsRestant = connexionBDD.getTempsCentrale(prefs.getString(KEY_NOM_PREFS,"CAMARADE")).toLong()
 
+        return tempsRestant
+    }
+
+    fun fondCentrale(temps:Long){
+        if(temps < 10 && temps >1){
+           if(temps>=9){
+                Outils.toastCourt(applicationContext, "Il reste : " + decompteCentrale.toString() + " secondes avant BOOM")
+           }
+            thermo.setImageDrawable(getDrawable(R.drawable.thermometre_etape5))
+        } else if(temps <40 && temps > 30){
+            thermo.setImageDrawable(getDrawable(R.drawable.thermometre_etape2))
+        } else if(temps <=30 && temps > 20) {
+            thermo.setImageDrawable(getDrawable(R.drawable.thermometre_etape3))
+        }else if(temps <=20 && temps > 10) {
+            thermo.setImageDrawable(getDrawable(R.drawable.thermometre_etape4))
+        }
+    }
 }

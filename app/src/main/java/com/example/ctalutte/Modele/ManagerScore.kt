@@ -17,20 +17,22 @@ class ManagerScore constructor(var context: Context) {
     val KEY_SESSION_OUVERTE = "session_active"
     val KEY_NB_TACHES = "nb_taches_finies"
     val KEY_FLAG = "key_flag"
+    val KEY_TEMPSCENTRALE = "key_temps_centrale"
 
     // activité en cours
     fun startTask(){
         Outils.logPerso("taskManager", "entrée startTask")
         val connexionBDD = GestionBDD(context, DB_NAME, null, DB_VERSION)
         val prefs = context.getSharedPreferences(MES_PREFS, AppCompatActivity.MODE_PRIVATE)
-        connexionBDD.commencerTache(prefs.getString(KEY_NOM_PREFS, "CAMARADE"))
+        Outils.logPerso("CentraleBDD","Dans manager score : " + prefs.getLong(KEY_TEMPSCENTRALE,0).toString())
+        connexionBDD.commencerTache(prefs.getString(KEY_NOM_PREFS, "CAMARADE"),prefs.getLong(KEY_TEMPSCENTRALE,0).toInt())
     }
 
     fun stopTask(score:Int, etatPartie: Boolean){
         Outils.logPerso("taskManager", "entrée stopTask")
         val connexionBDD = GestionBDD(context, DB_NAME, null, DB_VERSION)
         val prefs = context.getSharedPreferences(MES_PREFS, AppCompatActivity.MODE_PRIVATE)
-        connexionBDD.terminerTache(prefs.getString(KEY_NOM_PREFS,"CAMARADE"),score,etatPartie )
+        connexionBDD.terminerTache(prefs.getString(KEY_NOM_PREFS,"CAMARADE"),score,etatPartie,prefs.getLong(KEY_TEMPSCENTRALE,0).toInt())
     }
 
 }

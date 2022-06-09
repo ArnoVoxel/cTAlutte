@@ -145,6 +145,15 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineInfos"
         app:layout_constraintBottom_toTopOf="@id/guidelineRetourH" />
 
+    <ImageView
+        android:id="@+id/temperature_central"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/thermometre_base"
+        app:layout_constraintStart_toStartOf="@id/guidelineInfos"
+        app:layout_constraintBottom_toTopOf="@id/temperature_central"
+        />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineInfos"
         android:layout_width="wrap_content"

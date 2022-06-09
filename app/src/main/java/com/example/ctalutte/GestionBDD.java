@@ -19,6 +19,8 @@ public class GestionBDD extends SQLiteOpenHelper {
     private static final String SCORE = "score";
     private static final String NB_TACHES = "nb_taches";
     private static final String TACHE_FINIE = "tache_finie";
+    private static final String TEMPS_CENTRALE = "temps_centrale";
+    private static final String ETAT_PARTIE = "etat_partie";
 
     public GestionBDD(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version ) {
         super(context, name, factory, version);
@@ -31,7 +33,9 @@ public class GestionBDD extends SQLiteOpenHelper {
                 +NOM_JOUEUR+" TEXT PRIMARY KEY, "
                 +SCORE+" int NOT NULL, "
                 +TACHE_FINIE+" TEXT NOT NULL, "
-                +NB_TACHES+" int NOT NULL )";
+                +NB_TACHES+" int NOT NULL, "
+                +ETAT_PARTIE+" TEXT NOT NULL, "
+                +TEMPS_CENTRALE+" int )";
 
         db.execSQL(query);
 
@@ -68,6 +72,8 @@ public class GestionBDD extends SQLiteOpenHelper {
                 camarade.setScore(cursor.getInt(1));
                 camarade.setTache_finie(cursor.getString(2));
                 camarade.setNb_taches(cursor.getInt(3));
+                camarade.setTps_centrale(cursor.getInt(4));
+                camarade.setEtat_partie(cursor.getString(5));
 
                 listeCamarades.add(camarade);
             }while (cursor.moveToNext());
@@ -113,25 +119,26 @@ public class GestionBDD extends SQLiteOpenHelper {
     }
 
 
-    public void ajouterCamarade(String nomCmarade, Integer scoreCamarade, Integer nbTachesCamarade, String tacheFinie){
+    public void ajouterCamarade(String nomCmarade, Integer scoreCamarade, Integer nbTachesCamarade, String tacheFinie, Integer tempsCentrale, String etatPartie){
 
         SQLiteDatabase db = getReadableDatabase();
 
         scoreCamarade = 0;
         nbTachesCamarade = 0;
 
-        String insertCamarade ="INSERT INTO "+TABLE_NAME+" ("+NOM_JOUEUR+", "+SCORE+", "+NB_TACHES+","+TACHE_FINIE+") \n VALUES('"+nomCmarade+"', "+scoreCamarade+", "+nbTachesCamarade+", '"+tacheFinie+"');";
+
+        String insertCamarade ="INSERT INTO "+TABLE_NAME+" ("+NOM_JOUEUR+", "+SCORE+", "+NB_TACHES+", "+TACHE_FINIE+", "+TEMPS_CENTRALE+","+ETAT_PARTIE+") \n VALUES('"+nomCmarade+"', "+scoreCamarade+", "+nbTachesCamarade+", '"+tacheFinie+"', "+tempsCentrale+", '"+etatPartie+"');";
 
         db.execSQL(insertCamarade);
         db.close();
     }
 
-    public void commencerTache(String nomCamarade){
+    public void commencerTache(String nomCamarade, Integer tempsCentrale){
         Outils.logPerso("modifierBDD", "début fct commencer Tâche");
         SQLiteDatabase db = getReadableDatabase();
         Outils.logPerso("modifierBDD","après getReadable");
 
-        String modifierTache = "UPDATE "+TABLE_NAME+" SET "+ TACHE_FINIE+" = \'non\' WHERE "+ NOM_JOUEUR+" = '"+ nomCamarade +"';";
+        String modifierTache = "UPDATE "+TABLE_NAME+" SET "+ TACHE_FINIE+" = \'non\' ," + TEMPS_CENTRALE +" = " + tempsCentrale + " WHERE "+ NOM_JOUEUR+" = '"+ nomCamarade +"';";
         Outils.logPerso("modifierBDD","après préparation de la requête");
         Outils.logPerso("modifierBDD",modifierTache);
 
@@ -140,12 +147,12 @@ public class GestionBDD extends SQLiteOpenHelper {
         Outils.logPerso("modifierBDD","après exécution de la requête");
     }
 
-    public void terminerTache(String nomCamarade, int nouveauScore, boolean etatPartie){
+    public void terminerTache(String nomCamarade, int nouveauScore, boolean etatPartie, int tempsCentrale){
         Outils.logPerso("modifierBDD", "début fct terminerTache");
         SQLiteDatabase db = getReadableDatabase();
         Outils.logPerso("modifierBDD","après getReadable");
 
-        String modifierTache = "UPDATE "+TABLE_NAME+" SET "+ TACHE_FINIE+" = \'oui\' WHERE "+ NOM_JOUEUR+" = '"+ nomCamarade +"';";
+        String modifierTache = "UPDATE "+TABLE_NAME+" SET "+ TACHE_FINIE+" = \'oui\' ," + TEMPS_CENTRALE +" = '" + tempsCentrale + "' WHERE "+ NOM_JOUEUR+" = '"+ nomCamarade +"';";
         Outils.logPerso("modifierBDD","après préparation de la requête");
         Outils.logPerso("modifierBDD",modifierTache);
 
@@ -165,6 +172,31 @@ public class GestionBDD extends SQLiteOpenHelper {
              nouveauScoreNbTache = "UPDATE " + TABLE_NAME + " SET " + SCORE + " = " + SCORE + " +'" + nouveauScore + "' WHERE " + NOM_JOUEUR + " = '" + nomCamarade + "';";
         }
         db.execSQL(nouveauScoreNbTache);
+        db.close();
+    }
+
+    public Integer getTempsCentrale(String nomCamarade){
+        Integer tempsCentrale =0;
+        SQLiteDatabase db = getReadableDatabase();
+        Outils.logPerso("CentraleBDD",nomCamarade);
+        String requeteTaches = "SELECT temps_centrale FROM "+ TABLE_NAME+" WHERE nom_joueur = '"+ nomCamarade +"';";
+Outils.logPerso("CentraleBDD",requeteTaches);
+        Cursor cursor = db.rawQuery(requeteTaches, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        tempsCentrale = cursor.getInt(0);
+        Outils.logPerso("CentraleBDD","Dans Gestion BDD : " + tempsCentrale.toString());
+
+        return tempsCentrale;
+
+    }
+
+    public void setTempsCentrale(String nomCamarade, Integer tempsCentrale){
+        SQLiteDatabase db = getReadableDatabase();
+        String nouveauTempsCentrale = "UPDATE " + TABLE_NAME + " SET " + TEMPS_CENTRALE + " = " + tempsCentrale + " WHERE " + NOM_JOUEUR + " = '" + nomCamarade + "';";
+        db.execSQL(nouveauTempsCentrale);
         db.close();
     }
 

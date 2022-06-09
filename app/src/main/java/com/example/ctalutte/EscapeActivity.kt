@@ -3,6 +3,7 @@ package com.example.ctalutte
 import FragmentController
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
@@ -28,9 +29,23 @@ class EscapeActivity: AppCompatActivity() {
             this,
             this)
 
+        val compteur = object : CountDownTimer(5000, 1500) {
+            var valeurObstacle = 0
+            override fun onTick(millisUntilFinished: Long) {
+                valeurObstacle += 1500
+                createObstacle(valeurObstacle)
+            }
+
+            override fun onFinish() {
+                cancel()
+                finish()
+            }
+        }
+        compteur.start()
 
         var buttonReturn = findViewById<Button>(R.id.retourEscape)
         buttonReturn.setOnClickListener(View.OnClickListener {
+            compteur.cancel()
             val intent = Intent(this, BureauActivity::class.java)
             startActivity(intent)
         })
@@ -50,7 +65,6 @@ class EscapeActivity: AppCompatActivity() {
         animateBackground(R.id.backgroundEscape2, R.anim.escape_background_animation2)
 
         //animateObstacle(R.id.obstacle_layout, R.anim.escape_obstacle_bas)
-
     }
 
     fun animateBackground(background: Int, animationXML: Int) {
@@ -64,7 +78,6 @@ class EscapeActivity: AppCompatActivity() {
         val vueJoueur = findViewById<GifImageView>(joueur)
         positionBonhomme = "haut"
         vueJoueur.startAnimation(animJump)
-        createObstacle()
     }
 
     fun animateObstacle(animationXML: Int){
@@ -73,7 +86,7 @@ class EscapeActivity: AppCompatActivity() {
         vueObstacle.startAnimation(animObstacle)
     }
 
-    fun createObstacle(){
+    fun createObstacle(compteur: Int){
         /*var obstacle : Int = R.layout.activity_escape_obstacles
         setContentView(obstacle)*/
 
@@ -82,6 +95,10 @@ class EscapeActivity: AppCompatActivity() {
         var obstacleVue = layoutInflater.inflate(R.layout.activity_escape_obstacles, mainLayout, false)
 
         mainLayout.addView(obstacleVue)
-        animateObstacle(R.anim.escape_obstacle_haut)
+        if(compteur> 2500) {
+            animateObstacle(R.anim.escape_obstacle_haut)
+        } else {
+            animateObstacle(R.anim.escape_obstacle_bas)
+        }
     }
 }

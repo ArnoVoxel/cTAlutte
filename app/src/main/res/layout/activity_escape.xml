@@ -5,7 +5,6 @@
     android:id="@+id/motionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutDescription="@xml/activity_escape_scene"
     tools:context=".EscapeActivity">
 
 
@@ -13,13 +12,64 @@
         android:id="@+id/backgroundEscape1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_runner1" />
+        android:background="@drawable/background_runner" />
 
-    <!--<ImageView
+    <ImageView
         android:id="@+id/backgroundEscape2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/background_runner2" />-->
+        app:srcCompat="@drawable/background_runner" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHHaut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.35" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHBas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineAvant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineArriere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <pl.droidsonroids.gif.GifImageView
+    android:id="@+id/escape_bonhomme"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:src="@drawable/bonhomme_marche"
+    app:layout_constraintBottom_toTopOf="@id/guidelineHBas"
+    app:layout_constraintTop_toBottomOf="@id/guidelineHHaut"
+    app:layout_constraintEnd_toStartOf="@+id/guidelineAvant"
+    app:layout_constraintStart_toStartOf="@+id/guidelineArriere"/>
+
+
+    <Button
+    android:id="@+id/retourEscape"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="20dp"
+    android:text="RETOUR"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

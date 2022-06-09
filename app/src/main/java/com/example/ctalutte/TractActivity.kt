@@ -29,7 +29,6 @@ class TractActivity : AppCompatActivity() {
     //Quelques variables
 
     var score = 0
-    var flag = false
     lateinit var compteur : CountDownTimer
 
     // constantes pour la connexion
@@ -43,7 +42,6 @@ class TractActivity : AppCompatActivity() {
     private val KEY_TEMPSCENTRALE = "key_temps_centrale"
 
     val tacheManager = ManagerScore(this)
-    val animator = ObjectAnimator()
     val tempsActivity :Long = 10
     var decompte :Long = tempsActivity
 
@@ -70,16 +68,12 @@ class TractActivity : AppCompatActivity() {
             }
             override fun onFinish() {
                 Outils.toastCourt(applicationContext, "Au GOULAG !")
-                finish()
-            }
+                score = -25
+                backToOffice(false)
 
-            fun getDecompte(decompte: Int): Int {
-                return decompte
             }
-
         }.start()
 
-//       = frag.timer()
         frag.affichage(0)
 
         tract.apply {
@@ -138,8 +132,6 @@ class TractActivity : AppCompatActivity() {
         val receiverView: ImageView = v as ImageView
         val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
         val total = Integer.valueOf(getString(R.string.score))
-        val tacheManager = ManagerScore(this)
-
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
                 true
@@ -160,25 +152,8 @@ class TractActivity : AppCompatActivity() {
                 scoreJoueur.setText(score.toString())
                 if (score >= total) {
                     Outils.toastCourt(applicationContext, "VICTOIRE !")
-
-                    // MAJ des infos en BDD
-                    val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
-                    val prefsEditor = prefs.edit()
-                    val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
-
-                    //Gestion temps centrale
-                    val tempsBureau = prefs.getLong(KEY_TEMPSCENTRALE,0)
-                    val resultTemps = tempsBureau-((tempsActivity * 1000) - (decompte * 1000))
-
-                    // retour au mainActivity
-                    tacheManager.stopTask((score + decompte.toInt()),true)
-                    var connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
-                    prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
-                    prefsEditor.putLong(KEY_TEMPSCENTRALE,resultTemps)
-                    prefsEditor.apply()
-                    tacheManager.stopTask(score,true)
-                    compteur?.cancel()
-                    finish()
+                    score = score + decompte.toInt()
+                    backToOffice(true)
                 }
                 v.invalidate()
                 true
@@ -199,63 +174,35 @@ class TractActivity : AppCompatActivity() {
         val poubListen = View.OnDragListener {v, event ->
         val receiverView:ImageView = v as ImageView
         val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
-        val tacheManager = ManagerScore(this)
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
-
                 true
             }
             DragEvent.ACTION_DRAG_ENTERED -> {
-                v.invalidate()
                 true
             }
             DragEvent.ACTION_DRAG_LOCATION ->
                 true
             DragEvent.ACTION_DRAG_EXITED -> {
-                v.invalidate()
                 true
             }
             DragEvent.ACTION_DROP -> {
                 val item: ClipData.Item = event.clipData.getItemAt(0)
-                val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
-                val prefsEditor = prefs.edit()
-                val tempsBureau = prefs.getLong(KEY_TEMPSCENTRALE,0)
-                val resultTemps = tempsBureau-((tempsActivity * 1000) - (decompte * 1000))
-                Outils.logPerso("TestCompteur","ResultTemps: " + resultTemps.toString() + " tempsActi: " + tempsActivity.toString() + " decompte: " + decompte.toString())
-                var connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
                 var flag = false
-
                 if(testRegard()){
                     score = 25 + decompte.toInt()
                     Outils.toastCourt(applicationContext, "VICTOIRE !")
-                    // MAJ des infos en BDD
-
-                    val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
                     flag = true
-
-                    // retour au mainActivity
-
-                    prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
-
                     }
                 else{
                     score = -25
                     scoreJoueur.setText(score.toString())
                     Outils.toastLong(applicationContext,"TRICHEUR !!")
-
-
                 }
-
-                prefsEditor.putLong(KEY_TEMPSCENTRALE,resultTemps)
-                prefsEditor.apply()
-                tacheManager.stopTask(score,flag)
-                compteur?.cancel()
-                finish()
-//                v.invalidate()
+                backToOffice(flag)
                 true
             }
             DragEvent.ACTION_DRAG_ENDED -> {
-//                v.invalidate()
                 true
             }
             else -> {
@@ -274,7 +221,6 @@ class TractActivity : AppCompatActivity() {
         }else {
             return false;
         }
-
     }
 
     override fun onBackPressed(){
@@ -282,21 +228,24 @@ class TractActivity : AppCompatActivity() {
         val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
         score = -25
         scoreJoueur.setText(score.toString())
+        backToOffice(false)
+    }
 
-        //Gestion temps centrale
+    fun backToOffice(flagVictoire :Boolean){
         val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
         val prefsEditor = prefs.edit()
         val tempsBureau = prefs.getLong(KEY_TEMPSCENTRALE,0)
         val resultTemps = tempsBureau-decompte
+        val nomCamarade = prefs.getString(KEY_NOM_PREFS,"CAMARADE")
+        tacheManager.stopTask(score,flagVictoire)
+        val connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
+        if(flagVictoire){
+            prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
+        }
         prefsEditor.putLong(KEY_TEMPSCENTRALE,resultTemps)
         prefsEditor.apply()
-
-        //Retour au bureauActivity
-        Outils.toastLong(applicationContext,"La fuite est une insulte au Parti !!")
-        tacheManager.stopTask(score,false)
         compteur.cancel()
         finish()
-
     }
 }
 

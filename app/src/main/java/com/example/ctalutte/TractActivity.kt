@@ -30,6 +30,7 @@ class TractActivity : AppCompatActivity() {
 
     var score = 0
     var flag = false
+    lateinit var compteur : CountDownTimer
 
     // constantes pour la connexion
     private val DB_NAME = "lutte"
@@ -42,6 +43,8 @@ class TractActivity : AppCompatActivity() {
 
     val tacheManager = ManagerScore(this)
     val animator = ObjectAnimator()
+    var decompte :Long = 10
+
 
 
 
@@ -65,7 +68,24 @@ class TractActivity : AppCompatActivity() {
                                         this,
                                         this)
 
-       var compteur = frag.timer()
+        val chronoTache = findViewById<TextView>(R.id.chrono)
+        compteur = object : CountDownTimer(decompte*1000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                chronoTache?.setText(decompte.toString())
+                decompte--
+            }
+            override fun onFinish() {
+                Outils.toastCourt(applicationContext, "Au GOULAG !")
+                finish()
+            }
+
+            fun getDecompte(decompte: Int): Int {
+                return decompte
+            }
+
+        }.start()
+
+//       = frag.timer()
         frag.affichage(0)
 
         tract.apply {
@@ -245,8 +265,16 @@ class TractActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed(){
+        val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
+        score = -25
+        scoreJoueur.setText(score.toString())
+        Outils.toastLong(applicationContext,"La fuite est une insulte au Parti !!")
+        tacheManager.stopTask(score,false)
+        compteur.cancel()
+        finish()
 
-
+    }
 
 }
 

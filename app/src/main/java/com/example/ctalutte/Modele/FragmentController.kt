@@ -43,7 +43,7 @@ fun timer(): CountDownTimer {
     return compteur as CountDownTimer
 }
 
-    fun finTimer(){
+    fun  finTimer(){
         compteur?.cancel()
     }
 

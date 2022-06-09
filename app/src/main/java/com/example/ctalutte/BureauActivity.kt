@@ -28,10 +28,10 @@ class BureauActivity: AppCompatActivity() {
 
     //Pour la centrale
     var decompteCentrale:Long = 0
-    val compteur = object : CountDownTimer(10000, 500) {
+    val compteur = object : CountDownTimer(50000, 1000) {
         override fun onTick(millisUntilFinished: Long){
             decompteCentrale = millisUntilFinished / 1000
-            if(millisUntilFinished < 5000 && millisUntilFinished >4500){
+            if(millisUntilFinished < 10000 && millisUntilFinished >9500){
                 Outils.toastCourt(applicationContext, "Il reste : " + decompteCentrale.toString() + " secondes avant BOOM")
             }
             Outils.logPerso("compteur",decompteCentrale.toString())
@@ -83,7 +83,7 @@ class BureauActivity: AppCompatActivity() {
             Outils.logPerso("randomActivity", randomValue.toString())
 
             when(randomValue){
-                1 -> startActivity(intentTract)
+                1 -> startActivity(intentPierre)
                 2 -> startActivity(intentPierre)
             }
         })

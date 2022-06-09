@@ -159,5 +159,11 @@ public class CassePierreActivity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    public void onBackPressed(){
+        compteur.cancel();
+        Outils.toastCourt(getApplicationContext(), "Au GOULAG !");
+        tacheManager.stopTask(-25,false);
+        finish();
+    }
 }

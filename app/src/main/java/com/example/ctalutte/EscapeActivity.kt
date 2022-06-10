@@ -79,7 +79,7 @@ class EscapeActivity: AppCompatActivity() {
                     val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
 
                     // retour au mainActivity
-                    tacheManager.stopTask(score + decompte)
+                    tacheManager.stopTask(score + decompte, true)
                     prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
                     prefsEditor.commit()
 
@@ -90,7 +90,7 @@ class EscapeActivity: AppCompatActivity() {
 
             override fun onFinish() {
                 Outils.toastCourt(applicationContext, "Au GOULAG !")
-                tacheManager.stopTask(0)
+                tacheManager.stopTask(0,false)
                 this.cancel()
                 finish()
             }

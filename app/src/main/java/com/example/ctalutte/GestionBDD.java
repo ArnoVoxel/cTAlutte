@@ -55,12 +55,17 @@ public class GestionBDD extends SQLiteOpenHelper {
         return super.getWritableDatabase();
     }
 
-    public List<CamaradeInfos> getListeInfosCamarades(){
+    public List<CamaradeInfos> getListeInfosCamarades(boolean flag){
         List<CamaradeInfos> listeCamarades = new ArrayList<CamaradeInfos>();
 
         SQLiteDatabase db = getReadableDatabase();
+        String requeteListe = "";
+        if(flag){
+             requeteListe = "SELECT * FROM "+ TABLE_NAME + " WHERE etat_partie LIKE 'en cours';";
 
-        String requeteListe = "SELECT * FROM "+ TABLE_NAME;
+        }else{
+             requeteListe = "SELECT * FROM "+ TABLE_NAME + " WHERE etat_partie NOT LIKE 'en cours';";
+        }
         Outils.logPerso("BDD", requeteListe);
 
         Cursor cursor = db.rawQuery(requeteListe, null);
@@ -72,8 +77,8 @@ public class GestionBDD extends SQLiteOpenHelper {
                 camarade.setScore(cursor.getInt(1));
                 camarade.setTache_finie(cursor.getString(2));
                 camarade.setNb_taches(cursor.getInt(3));
-                camarade.setTps_centrale(cursor.getInt(4));
-                camarade.setEtat_partie(cursor.getString(5));
+                camarade.setTps_centrale(cursor.getInt(5));
+                camarade.setEtat_partie(cursor.getString(4));
 
                 listeCamarades.add(camarade);
             }while (cursor.moveToNext());
@@ -87,7 +92,7 @@ public class GestionBDD extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getReadableDatabase();
 
-        String requeteNoms = "SELECT nom_joueur FROM "+ TABLE_NAME+";";
+        String requeteNoms = "SELECT nom_joueur FROM "+ TABLE_NAME;
 
         Cursor cursor = db.rawQuery(requeteNoms, null);
 
@@ -229,7 +234,7 @@ Outils.logPerso("CentraleBDD","Dans Gestion BDD : " + tempsCentrale.toString());
             cursor.moveToFirst();
 
         etatPartie = cursor.getString(0);
-
+//Outils.logPerso("Lis");
         return etatPartie;
     }
 

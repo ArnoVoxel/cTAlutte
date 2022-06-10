@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         //affichage du bouton reprendre uniquement si nom existant en BDD
-        var listeCamarades = connexionBDD.getListeInfosCamarades()
+        var listeCamarades = connexionBDD.getListeInfosCamarades(true)
         val boutonContinuer = findViewById<Button>(R.id.bouton_continuer_modal)
 
         if(listeCamarades.size.toInt().equals(0)){
@@ -98,6 +98,18 @@ class MainActivity : AppCompatActivity() {
         })
         }
 
+        //affichage du bouton score uniquement si nom existant en BDD
+        var listeAncetre = connexionBDD.getListeInfosCamarades(false)
+        val boutonScore = findViewById<Button>(R.id.bouton_score_modal)
+
+        if(listeAncetre.size.toInt().equals(0)){
+            boutonScore.visibility = View.GONE
+        } else {
+            boutonScore.setOnClickListener {
+                val intentScore = Intent(this, ScoreCamaradesActivity::class.java)
+                startActivity(intentScore)
+            }
+        }
     }
 
     /**

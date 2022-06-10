@@ -29,7 +29,7 @@ class ListeCamaradesActivity : AppCompatActivity() {
 
         //récupération de la liste des éléments en BDD
         val connexionBDD = GestionBDD(this, DB_NAME, null, DB_VERSION)
-        var listeCamarades = connexionBDD.getListeInfosCamarades()
+        var listeCamarades = connexionBDD.getListeInfosCamarades(true)
 
         var listeTemp = arrayListOf<String>()
 

@@ -10,7 +10,7 @@ public class CamaradeInfos {
 
     public CamaradeInfos(){}
 
-    public  CamaradeInfos(String nom_joueur, Integer score, String tache_finie, Integer nb_taches, Integer tps_centrale, String etat_partie){
+    public  CamaradeInfos(String nom_joueur, Integer score, String tache_finie, Integer nb_taches, String etat_partie, Integer tps_centrale){
         this.nom_joueur = nom_joueur;
         this.score = score;
         this.tache_finie = tache_finie;

@@ -17,6 +17,7 @@
     <string name="nom_decompte">temps restant : </string>
     <string name="label_camarade">CAMARADE</string>
     <string name="label_nb_taches">nb tâches réalisées</string>
+    <string name="bouton_score">Vaillants ancêtres !</string>
 
     <!-- éléments page liste des camarades -->
     <string name="titre_liste_camarades">Communauté des Camarades</string>

@@ -46,6 +46,22 @@
             android:exported="false"
             android:screenOrientation="landscape">
         </activity>
+        <activity
+            android:name=".ScoreCamaradesActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".GoulagActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".LeaderActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".ExplosionActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

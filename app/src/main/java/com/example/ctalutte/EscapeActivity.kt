@@ -23,14 +23,18 @@ class EscapeActivity: AppCompatActivity() {
     private val MES_PREFS = "dossier_camarade"
     private val KEY_NOM_PREFS = "nom_du_camarade"
     private val KEY_NB_TACHES = "nb_taches_finies"
+    private val KEY_TEMPSCENTRALE = "key_temps_centrale"
 
     var positionBonhomme = "bas"
     var positionObstacle : String = "bas"
-    var decompte : Int = 10
+    val tempsActivity :Long = 10
+    var decompte : Long = tempsActivity
     val tacheManager = ManagerScore(this)
     var score : Int = 0
     val total : Int = R.string.score.toString().toInt()
     var valeurObstacle :Int = 0
+
+    lateinit var compteur: CountDownTimer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +57,7 @@ class EscapeActivity: AppCompatActivity() {
         // intégration du timer
         val chronoTache = findViewById<TextView>(R.id.chrono)
 
-        val compteur = object : CountDownTimer(10000, 1000) {
+        compteur = object : CountDownTimer(10000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 chronoTache.setText(decompte.toString())
                 decompte--
@@ -66,33 +70,14 @@ class EscapeActivity: AppCompatActivity() {
 
                 if (score >= 50){
                     Outils.toastCourt(getApplicationContext(), "RALACHO TAVARICH !")
-/*                    // RAZ des compteurs
-                    compteur.cancel()
-                    compteurObstacle.cancel()*/
 
-                    // MAJ des infos en BDD
-
-                    // MAJ des infos en BDD
-                    val connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
-                    val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
-                    val prefsEditor = prefs.edit()
-                    val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
-
-                    // retour au mainActivity
-                    tacheManager.stopTask(score + decompte, true)
-                    prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
-                    prefsEditor.commit()
-
-                    this.cancel()
-                    finish()
+                backToOffice(true)
                 }
             }
 
             override fun onFinish() {
                 Outils.toastCourt(applicationContext, "Au GOULAG !")
-                tacheManager.stopTask(0,false)
-                this.cancel()
-                finish()
+                backToOffice(false)
             }
         }
         compteur.start()
@@ -164,5 +149,27 @@ class EscapeActivity: AppCompatActivity() {
             positionObstacle = "bas"
         }
         return positionObstacle
+    }
+
+    /**
+     * Gère le score, état de l'activité en BDD et temps centrale lors de la fin du mini jeu
+     */
+    fun backToOffice(flagVictoire :Boolean){
+        val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+        val prefsEditor = prefs.edit()
+        val tempsBureau = prefs.getLong(KEY_TEMPSCENTRALE,0)
+        val tempsDansJeu = (tempsActivity-decompte)*1000
+        val resultTemps = tempsBureau-tempsDansJeu
+        Outils.logPerso("TestCompteur","backToOffice : "+ resultTemps.toString())
+        val nomCamarade = prefs.getString(KEY_NOM_PREFS,"CAMARADE")
+        tacheManager.stopTask(score,flagVictoire,resultTemps.toInt())
+        val connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
+        if(flagVictoire){
+            prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
+        }
+        prefsEditor.putLong(KEY_TEMPSCENTRALE,resultTemps)
+        prefsEditor.apply()
+        compteur.cancel()
+        finish()
     }
 }

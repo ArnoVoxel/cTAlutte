@@ -53,6 +53,8 @@ class BureauActivity: AppCompatActivity() {
             override fun onFinish() {
                 Outils.toastCourt(applicationContext,"BOOOOM !")
                 changerEtatPartie("Hiver nucléaire")
+                val intent = Intent(applicationContext, ExplosionActivity::class.java)
+                startActivity(intent)
 
             }
         }
@@ -179,6 +181,8 @@ Outils.logPerso("TestCompteur","Dans onResume : " + tempsCompteur.toString())
                 override fun onFinish() {
                     Outils.toastCourt(applicationContext,"BOOOOM !")
                     changerEtatPartie("Hiver nucléaire")
+                    val intent = Intent(applicationContext, ExplosionActivity::class.java)
+                    startActivity(intent)
 
                 }
             }
@@ -188,15 +192,21 @@ Outils.logPerso("finDePartie","cas 0 : " + recupererEtatPartie())
             1->{
                 Outils.toastCourt(this,"Vous avez perdu : GOULAAAAG !")
                 changerEtatPartie("Goulag")
+                val intent = Intent(this, GoulagActivity::class.java)
+                startActivity(intent)
 Outils.logPerso("finDePartie","cas 1 : " + recupererEtatPartie())
             }
             2->{
                 Outils.toastCourt(this,"Victoire ! Vous êtes Leader Suprème !")
                 changerEtatPartie("Leader")
+                val intent = Intent(this, LeaderActivity::class.java)
+                startActivity(intent)
 Outils.logPerso("finDePartie","cas 2 : " + recupererEtatPartie())
             }
             3->{
                 Outils.toastCourt(this,"BOOOOM !")
+                val intent = Intent(this, ExplosionActivity::class.java)
+                startActivity(intent)
                 changerEtatPartie("Hiver nucléaire")
 Outils.logPerso("finDePartie","cas 3 : " + recupererEtatPartie())
             }
@@ -239,6 +249,8 @@ Outils.logPerso("compteur",decompteCentrale.toString())
                 override fun onFinish() {
                     Outils.toastCourt(applicationContext,"BOOOOM !")
                     changerEtatPartie("Hiver nucléaire")
+                    val intent = Intent(applicationContext, ExplosionActivity::class.java)
+                    startActivity(intent)
 
                 }
             }

@@ -150,6 +150,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/bouton_continuer"
                     app:layout_constraintTop_toBottomOf="@id/bouton_valider_modal" />
+                <Button
+                    android:id="@+id/bouton_score_modal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bouton_score"
+                    app:layout_constraintTop_toBottomOf="@id/bouton_continuer_modal" />
+
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

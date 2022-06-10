@@ -1,30 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    tools:context=".EscapeActivity">
 
-    <FrameLayout
-        android:id="@+id/frameLayoutEscape"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/backgroundEscape1"
-        app:srcCompat="@drawable/background_runner1"
-        android:scaleType="fitXY"
-        />
-
-    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/menuFragment"
+        android:background="@drawable/background_runner" />
+
+    <ImageView
         android:id="@+id/backgroundEscape2"
-        app:srcCompat="@drawable/background_runner2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/menuFragment"
         android:scaleType="fitXY"
+        app:srcCompat="@drawable/background_runner" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHHaut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.35" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHBas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineAvant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineArriere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <pl.droidsonroids.gif.GifImageView
+    android:id="@+id/escape_bonhomme"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:src="@drawable/bonhomme_marche"
+    app:layout_constraintBottom_toTopOf="@id/guidelineHBas"
+    app:layout_constraintTop_toBottomOf="@id/guidelineHHaut"
+    app:layout_constraintEnd_toStartOf="@+id/guidelineAvant"
+    app:layout_constraintStart_toStartOf="@+id/guidelineArriere"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/obstacle_layout"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/menuFragment"
+        app:layout_constraintTop_toTopOf="parent"
+        android:name="com.example.ctalutte.MenuFragment"
         />
 
-    </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

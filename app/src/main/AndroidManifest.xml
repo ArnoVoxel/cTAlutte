@@ -36,7 +36,14 @@
             android:name=".CassePierreActivity"
             android:exported="false"
             android:screenOrientation="landscape" />
-        <activity android:name="TractActivity"
+        <activity
+            android:name="TractActivity"
+            android:exported="false"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name="EscapeActivity"
+            android:exported="false"
             android:screenOrientation="landscape">
         </activity>
     </application>

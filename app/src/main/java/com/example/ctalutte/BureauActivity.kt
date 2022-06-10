@@ -51,7 +51,8 @@ class BureauActivity: AppCompatActivity() {
 
             }
             override fun onFinish() {
-                Outils.toastCourt(applicationContext,"Fin")
+                Outils.toastCourt(applicationContext,"BOOOOM !")
+                changerEtatPartie("Hiver nucléaire")
 
             }
         }
@@ -163,20 +164,54 @@ class BureauActivity: AppCompatActivity() {
         afficherInfosCamarade()
         compteur.cancel()
         tempsCompteur = resumeCentrale()
-        Outils.logPerso("TestCompteur",tempsCompteur.toString())
-        compteur = object : CountDownTimer(tempsCompteur, 1000) {
-            override fun onTick(millisUntilFinished: Long){
-                decompteCentrale = millisUntilFinished / 1000
-                fondCentrale(decompteCentrale)
-                Outils.logPerso("compteur",decompteCentrale.toString())
+Outils.logPerso("TestCompteur","Dans onResume : " + tempsCompteur.toString())
+        when(testFinPartie(tempsCompteur)){
+            0->{
+                compteur = object : CountDownTimer(tempsCompteur, 1000) {
+                override fun onTick(millisUntilFinished: Long){
+                    decompteCentrale = millisUntilFinished / 1000
+                    fondCentrale(decompteCentrale)
+                    Outils.logPerso("compteur",decompteCentrale.toString())
 
+                }
+                override fun onFinish() {
+                    Outils.toastCourt(applicationContext,"BOOOOM !")
+                    changerEtatPartie("Hiver nucléaire")
+
+                }
             }
-            override fun onFinish() {
-                Outils.toastCourt(applicationContext,"Fin")
-
+                compteur.start()
+Outils.logPerso("finDePartie","cas 0 : " + recupererEtatPartie())
+            }
+            1->{
+                Outils.toastCourt(this,"Vous avez perdu : GOULAAAAG !")
+                changerEtatPartie("Goulag")
+Outils.logPerso("finDePartie","cas 1 : " + recupererEtatPartie())
+            }
+            2->{
+                Outils.toastCourt(this,"Victoire ! Vous êtes Leader Suprème !")
+                changerEtatPartie("Leader")
+Outils.logPerso("finDePartie","cas 2 : " + recupererEtatPartie())
+            }
+            3->{
+                Outils.toastCourt(this,"BOOOOM !")
+                changerEtatPartie("Hiver nucléaire")
+Outils.logPerso("finDePartie","cas 3 : " + recupererEtatPartie())
             }
         }
-        compteur.start()
+//        compteur = object : CountDownTimer(tempsCompteur, 1000) {
+//            override fun onTick(millisUntilFinished: Long){
+//                decompteCentrale = millisUntilFinished / 1000
+//                fondCentrale(decompteCentrale)
+//                Outils.logPerso("compteur",decompteCentrale.toString())
+//
+//            }
+//            override fun onFinish() {
+//                Outils.toastCourt(applicationContext,"Fin")
+//
+//            }
+//        }
+//        compteur.start()
 
     }
 
@@ -196,11 +231,12 @@ class BureauActivity: AppCompatActivity() {
                 override fun onTick(millisUntilFinished: Long){
                     decompteCentrale = millisUntilFinished / 1000
                     fondCentrale(decompteCentrale)
-                    Outils.logPerso("compteur",decompteCentrale.toString())
+Outils.logPerso("compteur",decompteCentrale.toString())
 
                 }
                 override fun onFinish() {
-                    Outils.toastCourt(applicationContext,"Fin")
+                    Outils.toastCourt(applicationContext,"BOOOOM !")
+                    changerEtatPartie("Hiver nucléaire")
 
                 }
             }
@@ -216,6 +252,7 @@ class BureauActivity: AppCompatActivity() {
 //        val tempsRestant = prefs.getLong(KEY_TEMPSCENTRALE,50000)
         val connexionBDD = GestionBDD(this, DB_NAME, null, DB_VERSION)
         val tempsRestant = connexionBDD.getTempsCentrale(prefs.getString(KEY_NOM_PREFS,"CAMARADE")).toLong()
+Outils.logPerso("TestCompteur","Dans resumeCentrale : " + tempsRestant.toString())
 
         return tempsRestant
     }
@@ -266,5 +303,22 @@ class BureauActivity: AppCompatActivity() {
         val score = connexionBDD.getScore(prefs.getString(KEY_NOM_PREFS,"CAMARADE"))
 //Outils.logPerso("testScore",score.toString())
         return score
+    }
+
+    fun testFinPartie(tempsPartie:Long):Int{
+        var checkPartie = 0
+        val prefs = this.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+
+        if(recupereScore()<0){
+            checkPartie = 1
+            return checkPartie
+        } else if(prefs.getInt(KEY_NB_TACHES,0)>=5) {
+            checkPartie = 2
+            return checkPartie
+        } else if(tempsPartie<=0){
+            return checkPartie
+        }
+
+        return checkPartie
     }
 }

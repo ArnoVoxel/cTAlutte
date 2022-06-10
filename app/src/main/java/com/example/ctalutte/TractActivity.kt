@@ -244,9 +244,11 @@ class TractActivity : AppCompatActivity() {
         val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
         val prefsEditor = prefs.edit()
         val tempsBureau = prefs.getLong(KEY_TEMPSCENTRALE,0)
-        val resultTemps = tempsBureau-decompte
+        val tempsDansJeu = (tempsActivity-decompte)*1000
+        val resultTemps = tempsBureau-tempsDansJeu
+Outils.logPerso("TestCompteur","backToOffice : "+ resultTemps.toString())
         val nomCamarade = prefs.getString(KEY_NOM_PREFS,"CAMARADE")
-        tacheManager.stopTask(score,flagVictoire)
+        tacheManager.stopTask(score,flagVictoire,resultTemps.toInt())
         val connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
         if(flagVictoire){
             prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))

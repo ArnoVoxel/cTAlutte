@@ -180,9 +180,10 @@ public class CassePierreActivity extends AppCompatActivity {
        SharedPreferences prefs= getSharedPreferences(MES_PREFS,MODE_PRIVATE);
        SharedPreferences.Editor prefsEditor = prefs.edit();
        Long tempsBureau = prefs.getLong(KEY_TEMPSCENTRALE,0L);
-       Long resultTemps = tempsBureau - decompte;
+       Long tempsDansJeu = (tempsBureau - tempsBureau)*1000;
+       Integer resultTemps = Math.toIntExact(tempsBureau - tempsDansJeu);
        String nomCamarade = prefs.getString(KEY_NOM_PREFS,"CAMARADE");
-       tacheManager.stopTask(score,flagVictoire);
+       tacheManager.stopTask(score,flagVictoire,resultTemps);
        GestionBDD connexionBDD= new GestionBDD(this,DB_NAME,null,DB_VERSION);
        if(flagVictoire){
            prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade));

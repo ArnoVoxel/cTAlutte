@@ -28,11 +28,11 @@ class ManagerScore constructor(var context: Context) {
         connexionBDD.commencerTache(prefs.getString(KEY_NOM_PREFS, "CAMARADE"),prefs.getLong(KEY_TEMPSCENTRALE,0).toInt())
     }
 
-    fun stopTask(score:Int, etatPartie: Boolean){
+    fun stopTask(score:Int, etatPartie: Boolean, tempsRestant:Int){
         Outils.logPerso("taskManager", "entrée stopTask")
         val connexionBDD = GestionBDD(context, DB_NAME, null, DB_VERSION)
         val prefs = context.getSharedPreferences(MES_PREFS, AppCompatActivity.MODE_PRIVATE)
-        connexionBDD.terminerTache(prefs.getString(KEY_NOM_PREFS,"CAMARADE"),score,etatPartie,prefs.getLong(KEY_TEMPSCENTRALE,0).toInt())
+        connexionBDD.terminerTache(prefs.getString(KEY_NOM_PREFS,"CAMARADE"),score,etatPartie,tempsRestant)
     }
 
 }

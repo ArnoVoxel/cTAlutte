@@ -137,6 +137,22 @@
         app:layout_constraintTop_toTopOf="@+id/guidelineDossierH"
         />
 
+    <Button
+        android:id="@+id/bouton_central"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Froid !"
+        app:layout_constraintStart_toStartOf="@+id/guidelineInfos"
+        app:layout_constraintBottom_toTopOf="@id/guidelineRetourH" />
+
+    <ImageView
+        android:id="@+id/temperature_central"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/thermometre_base"
+        app:layout_constraintStart_toStartOf="@id/guidelineInfos"
+        app:layout_constraintBottom_toTopOf="@id/temperature_central"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineInfos"
@@ -144,6 +160,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="40dp" />
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

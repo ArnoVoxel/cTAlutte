@@ -29,7 +29,7 @@ class TractActivity : AppCompatActivity() {
     //Quelques variables
 
     var score = 0
-    var flag = false
+    lateinit var compteur : CountDownTimer
 
     // constantes pour la connexion
     private val DB_NAME = "lutte"
@@ -39,12 +39,11 @@ class TractActivity : AppCompatActivity() {
     private val MES_PREFS = "dossier_camarade"
     private val KEY_NOM_PREFS = "nom_du_camarade"
     private val KEY_NB_TACHES = "nb_taches_finies"
+    private val KEY_TEMPSCENTRALE = "key_temps_centrale"
 
     val tacheManager = ManagerScore(this)
-    val animator = ObjectAnimator()
-
-
-
+    val tempsActivity :Long = 10
+    var decompte :Long = tempsActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         @Suppress("DEPRECATION")
@@ -57,15 +56,24 @@ class TractActivity : AppCompatActivity() {
         setContentView(R.layout.activity_distrib)
         tacheManager.startTask()
         val tract = findViewById<ImageView>(R.id.drop_tract)
-        val  frag = FragmentController(findViewById<TextView>(R.id.chrono),
-                                        null,
-                                        findViewById<TextView>(R.id.score_joueur),
+        val  frag = FragmentController( findViewById<TextView>(R.id.score_joueur),
                                         findViewById<TextView>(R.id.nom_tache),
-                                        10,
-                                        this,
                                         this)
 
-       var compteur = frag.timer()
+        val chronoTache = findViewById<TextView>(R.id.chrono)
+        compteur = object : CountDownTimer(decompte*1000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                chronoTache?.setText(decompte.toString())
+                decompte--
+            }
+            override fun onFinish() {
+                Outils.toastCourt(applicationContext, "Au GOULAG !")
+                score = -25
+                backToOffice(false)
+
+            }
+        }.start()
+
         frag.affichage(0)
 
         tract.apply {
@@ -118,13 +126,14 @@ class TractActivity : AppCompatActivity() {
         bonhomme.setOnDragListener(bonhommeListen)
     }
 
-//Event listener camarade :
+    /**
+     * Event listener camarade
+     */
     fun createListenerCamarade(compteur :CountDownTimer,frag :FragmentController) : View.OnDragListener {
         val camaradeListen = View.OnDragListener { v, event ->
         val receiverView: ImageView = v as ImageView
         val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
         val total = Integer.valueOf(getString(R.string.score))
-        val tacheManager = ManagerScore(this)
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
                 true
@@ -145,19 +154,8 @@ class TractActivity : AppCompatActivity() {
                 scoreJoueur.setText(score.toString())
                 if (score >= total) {
                     Outils.toastCourt(applicationContext, "VICTOIRE !")
-
-                    // MAJ des infos en BDD
-                    val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
-                    val prefsEditor = prefs.edit()
-                    val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
-
-                    // retour au mainActivity
-                    tacheManager.stopTask((score + frag.decompte.toInt()),true)
-                    var connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
-                    prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
-                    prefsEditor.apply()
-                    compteur?.cancel()
-                    finish()
+                    score = score + decompte.toInt()
+                    backToOffice(true)
                 }
                 v.invalidate()
                 true
@@ -173,57 +171,42 @@ class TractActivity : AppCompatActivity() {
         }
         return camaradeListen
 }
-    //Event Listener poubelle
+    /**
+     *     Event Listener poubelle
+     */
     fun createListenerPoubelle(compteur :CountDownTimer, frag :FragmentController) : View.OnDragListener {
         val poubListen = View.OnDragListener {v, event ->
         val receiverView:ImageView = v as ImageView
         val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
-        val tacheManager = ManagerScore(this)
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
-
                 true
             }
             DragEvent.ACTION_DRAG_ENTERED -> {
-                v.invalidate()
                 true
             }
             DragEvent.ACTION_DRAG_LOCATION ->
                 true
             DragEvent.ACTION_DRAG_EXITED -> {
-                v.invalidate()
                 true
             }
             DragEvent.ACTION_DROP -> {
                 val item: ClipData.Item = event.clipData.getItemAt(0)
+                var flag = false
                 if(testRegard()){
-                    score = 25
+                    score = 25 + decompte.toInt()
                     Outils.toastCourt(applicationContext, "VICTOIRE !")
-                    // MAJ des infos en BDD
-                    val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
-                    val prefsEditor = prefs.edit()
-                    val nomCamarade = prefs.getString(KEY_NOM_PREFS, "CAMARADE")
-
-                    // retour au mainActivity
-                    tacheManager.stopTask((score + frag.decompte.toInt()),true)
-                    var connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
-                    prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
-                    prefsEditor.apply()
-                    compteur?.cancel()
-                    finish()}
+                    flag = true
+                    }
                 else{
                     score = -25
                     scoreJoueur.setText(score.toString())
                     Outils.toastLong(applicationContext,"TRICHEUR !!")
-                    tacheManager.stopTask(score,false)
-                    compteur?.cancel()
-                    finish()
                 }
-                v.invalidate()
+                backToOffice(flag)
                 true
             }
             DragEvent.ACTION_DRAG_ENDED -> {
-                v.invalidate()
                 true
             }
             else -> {
@@ -234,22 +217,46 @@ class TractActivity : AppCompatActivity() {
         return poubListen
     }
 
+    /**
+     * Vérifie si la poubelle est dans le champ de vision du passant
+     */
     fun testRegard(): Boolean{
-
         val bonhomme = findViewById<pl.droidsonroids.gif.GifImageView>(R.id.bonhomme)
         if(bonhomme.getRotationY().toString() == "180.0"){
             return true
         }else {
             return false;
         }
-
     }
 
+    override fun onBackPressed(){
+        Outils.toastCourt(this,"La fuite n'est pas une option !")
+        val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
+        score = -25
+        scoreJoueur.setText(score.toString())
+        backToOffice(false)
+    }
 
-
-
+    /**
+     * Gère le score, état de l'activité en BDD et temps centrale lors de la fin du mini jeu
+     */
+    fun backToOffice(flagVictoire :Boolean){
+        val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+        val prefsEditor = prefs.edit()
+        val tempsBureau = prefs.getLong(KEY_TEMPSCENTRALE,0)
+        val tempsDansJeu = (tempsActivity-decompte)*1000
+        val resultTemps = tempsBureau-tempsDansJeu
+Outils.logPerso("TestCompteur","backToOffice : "+ resultTemps.toString())
+        val nomCamarade = prefs.getString(KEY_NOM_PREFS,"CAMARADE")
+        tacheManager.stopTask(score,flagVictoire,resultTemps.toInt())
+        val connexionBDD = GestionBDD(applicationContext, DB_NAME, null, DB_VERSION)
+        if(flagVictoire){
+            prefsEditor.putInt(KEY_NB_TACHES, connexionBDD.getNbTaches(nomCamarade))
+        }
+        prefsEditor.putLong(KEY_TEMPSCENTRALE,resultTemps)
+        prefsEditor.apply()
+        compteur.cancel()
+        finish()
+    }
 }
 
-//private fun GifImageView.postOnAnimation(startAnimation: Unit) {
-//
-//}

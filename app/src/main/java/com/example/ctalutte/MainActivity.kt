@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         var nomCamarade = findViewById<EditText>(R.id.champ_nom_utilisateur)
 
         val connexionBDD = GestionBDD(this, DB_NAME, null, DB_VERSION)
-        connexionBDD.ajouterCamarade(nomCamarade.text.toString(), 0, 0, "oui")
+        connexionBDD.ajouterCamarade(nomCamarade.text.toString(), 0, 0, "oui",50000,"en cours")
 
         ajouterCamaradePref(nomCamarade.text.toString())
     }

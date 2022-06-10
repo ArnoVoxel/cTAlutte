@@ -175,10 +175,22 @@ public class GestionBDD extends SQLiteOpenHelper {
         db.close();
     }
 
+    public Integer getScore(String nomCamarade){
+        SQLiteDatabase db = getReadableDatabase();
+        int score=0;
+        String requeteTaches = "SELECT score FROM "+ TABLE_NAME+" WHERE nom_joueur = '"+ nomCamarade +"';";
+        Cursor cursor = db.rawQuery(requeteTaches, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        score = cursor.getInt(0);
+        return score;
+    }
+
     public Integer getTempsCentrale(String nomCamarade){
         Integer tempsCentrale =0;
         SQLiteDatabase db = getReadableDatabase();
-        Outils.logPerso("CentraleBDD",nomCamarade);
+Outils.logPerso("CentraleBDD",nomCamarade);
         String requeteTaches = "SELECT temps_centrale FROM "+ TABLE_NAME+" WHERE nom_joueur = '"+ nomCamarade +"';";
 Outils.logPerso("CentraleBDD",requeteTaches);
         Cursor cursor = db.rawQuery(requeteTaches, null);
@@ -187,7 +199,7 @@ Outils.logPerso("CentraleBDD",requeteTaches);
             cursor.moveToFirst();
 
         tempsCentrale = cursor.getInt(0);
-        Outils.logPerso("CentraleBDD","Dans Gestion BDD : " + tempsCentrale.toString());
+Outils.logPerso("CentraleBDD","Dans Gestion BDD : " + tempsCentrale.toString());
 
         return tempsCentrale;
 
@@ -198,6 +210,27 @@ Outils.logPerso("CentraleBDD",requeteTaches);
         String nouveauTempsCentrale = "UPDATE " + TABLE_NAME + " SET " + TEMPS_CENTRALE + " = " + tempsCentrale + " WHERE " + NOM_JOUEUR + " = '" + nomCamarade + "';";
         db.execSQL(nouveauTempsCentrale);
         db.close();
+    }
+
+    public void setEtatPartie(String nomCamarade, String etatPartie){
+        SQLiteDatabase db = getReadableDatabase();
+        String nouveauTempsCentrale = "UPDATE " + TABLE_NAME + " SET " + ETAT_PARTIE + " = '" + etatPartie + "' WHERE " + NOM_JOUEUR + " = '" + nomCamarade + "';";
+        db.execSQL(nouveauTempsCentrale);
+        db.close();
+    }
+
+    public String getEtatPartie(String nomCamarade){
+        String etatPartie = "";
+        SQLiteDatabase db = getReadableDatabase();
+        String requeteTaches = "SELECT etat_partie FROM "+ TABLE_NAME+" WHERE nom_joueur = '"+ nomCamarade +"';";
+        Cursor cursor = db.rawQuery(requeteTaches, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        etatPartie = cursor.getString(0);
+
+        return etatPartie;
     }
 
 

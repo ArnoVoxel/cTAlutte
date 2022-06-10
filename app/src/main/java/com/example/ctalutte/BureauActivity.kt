@@ -96,13 +96,15 @@ class BureauActivity: AppCompatActivity() {
             Outils.logPerso("randomActivity", randomValue.toString())
 
             when(randomValue){
-                1 -> startActivity(intentPierre)
+                1 -> startActivity(intentTract)
                 2 -> startActivity(intentPierre)
             }
         })
         //Abonnement bouton centrale
         var boutonCentrale = findViewById<Button>(R.id.bouton_central)
-        boutonCentrale.setOnClickListener(View.OnClickListener { refroidirCentrale() },)
+        boutonCentrale.setOnClickListener(View.OnClickListener { refroidirCentrale() })
+//        boutonCentrale.setOnClickListener({ testScore() })
+
 
 
         var boutonRetour = findViewById<ImageButton>(R.id.bouton_retour)
@@ -146,10 +148,16 @@ class BureauActivity: AppCompatActivity() {
         vueNbTachesMur.text = nbTachesMur.toString()
     }
 
+    /**
+     * Comportement de l'activité quand appuie sur le bouton retour
+     */
     override fun onBackPressed(){
 
     }
 
+    /**
+     * Comportement de l'activité lors du retour dessus
+     */
     override fun onResume() {
         super.onResume()
         afficherInfosCamarade()
@@ -172,6 +180,9 @@ class BureauActivity: AppCompatActivity() {
 
     }
 
+    /**
+    * Relance le compteur à zéro de la centrale
+    */
     fun refroidirCentrale(){
         Outils.logPerso("compteur","avant cancel")
         if(decompteCentrale > 10)
@@ -197,7 +208,9 @@ class BureauActivity: AppCompatActivity() {
         }
 
     }
-
+    /**
+    *Récupère le temps du compteur quand retour sur le bureau
+    */
     fun resumeCentrale():Long{
         val prefs = this.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
 //        val tempsRestant = prefs.getLong(KEY_TEMPSCENTRALE,50000)
@@ -207,6 +220,9 @@ class BureauActivity: AppCompatActivity() {
         return tempsRestant
     }
 
+    /**
+     *     Gère la couleur de la centrale en fonction du compteur
+     */
     fun fondCentrale(temps:Long){
         if(temps < 10 && temps >1){
            if(temps>=9){
@@ -220,5 +236,35 @@ class BureauActivity: AppCompatActivity() {
         }else if(temps <=20 && temps > 10) {
             thermo.setImageDrawable(getDrawable(R.drawable.thermometre_etape4))
         }
+    }
+
+    /**
+     * Récupère l'état de la partie du joueur en BDD
+     */
+    fun recupererEtatPartie():String{
+//Outils.logPerso("testPartie","Entrée Etat Partie")
+        val prefs = this.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+        val connexionBDD = GestionBDD(this,DB_NAME,null,DB_VERSION)
+        val etatPartie = connexionBDD.getEtatPartie(prefs.getString(KEY_NOM_PREFS,"CAMARADE"))
+//Outils.logPerso("testPartie",etatPartie)
+        return etatPartie
+    }
+
+    /**
+     * Change l'état de la partie du joueur en BDD
+     */
+    fun changerEtatPartie(etat : String){
+        val prefs = this.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+        val connexionBDD = GestionBDD(this,DB_NAME,null,DB_VERSION)
+        connexionBDD.setEtatPartie(prefs.getString(KEY_NOM_PREFS,"CAMARADE"),etat)
+//Outils.logPerso("testPartie",recupererEtatPartie())
+    }
+
+    fun recupereScore():Int{
+        val prefs = this.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+        val connexionBDD = GestionBDD(this,DB_NAME,null,DB_VERSION)
+        val score = connexionBDD.getScore(prefs.getString(KEY_NOM_PREFS,"CAMARADE"))
+//Outils.logPerso("testScore",score.toString())
+        return score
     }
 }

@@ -126,7 +126,9 @@ class TractActivity : AppCompatActivity() {
         bonhomme.setOnDragListener(bonhommeListen)
     }
 
-//Event listener camarade :
+    /**
+     * Event listener camarade
+     */
     fun createListenerCamarade(compteur :CountDownTimer,frag :FragmentController) : View.OnDragListener {
         val camaradeListen = View.OnDragListener { v, event ->
         val receiverView: ImageView = v as ImageView
@@ -169,7 +171,9 @@ class TractActivity : AppCompatActivity() {
         }
         return camaradeListen
 }
-    //Event Listener poubelle
+    /**
+     *     Event Listener poubelle
+     */
     fun createListenerPoubelle(compteur :CountDownTimer, frag :FragmentController) : View.OnDragListener {
         val poubListen = View.OnDragListener {v, event ->
         val receiverView:ImageView = v as ImageView
@@ -213,8 +217,10 @@ class TractActivity : AppCompatActivity() {
         return poubListen
     }
 
+    /**
+     * Vérifie si la poubelle est dans le champ de vision du passant
+     */
     fun testRegard(): Boolean{
-
         val bonhomme = findViewById<pl.droidsonroids.gif.GifImageView>(R.id.bonhomme)
         if(bonhomme.getRotationY().toString() == "180.0"){
             return true
@@ -224,13 +230,16 @@ class TractActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed(){
-        //Gestion du score
+        Outils.toastCourt(this,"La fuite n'est pas une option !")
         val scoreJoueur = findViewById<TextView>(R.id.score_joueur)
         score = -25
         scoreJoueur.setText(score.toString())
         backToOffice(false)
     }
 
+    /**
+     * Gère le score, état de l'activité en BDD et temps centrale lors de la fin du mini jeu
+     */
     fun backToOffice(flagVictoire :Boolean){
         val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
         val prefsEditor = prefs.edit()

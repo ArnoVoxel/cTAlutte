@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/vue_exterieure"
+        android:src="@drawable/centrale_niveau1"
         tools:layout_editor_absoluteX="97dp"
         tools:layout_editor_absoluteY="0dp"
         />
@@ -124,35 +124,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.65"
-        />
+        app:layout_constraintGuide_percent="0.64" />
 
     <ImageButton
         android:id="@+id/bouton_dossier"
-        android:layout_width="67dp"
+        android:layout_width="110dp"
         android:layout_height="101dp"
-        android:background="@drawable/dossier"
+        android:background="@drawable/dossier5"
 
         app:layout_constraintStart_toStartOf="@+id/guidelineDossierV"
         app:layout_constraintTop_toTopOf="@+id/guidelineDossierH"
         />
 
-    <Button
+    <ImageButton
         android:id="@+id/bouton_central"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Froid !"
+        android:src="@drawable/push_me"
+        android:background="@color/green"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@+id/guidelineInfos"
         app:layout_constraintBottom_toTopOf="@id/guidelineRetourH" />
 
-    <ImageView
-        android:id="@+id/temperature_central"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@drawable/thermometre_base"
-        app:layout_constraintStart_toStartOf="@id/guidelineInfos"
-        app:layout_constraintBottom_toTopOf="@id/temperature_central"
-        />
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineInfos"

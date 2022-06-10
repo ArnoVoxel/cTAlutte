@@ -1,9 +1,11 @@
 package com.example.ctalutte
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.view.View
 import android.view.WindowManager
@@ -32,6 +34,10 @@ class BureauActivity: AppCompatActivity() {
     lateinit var thermo : ImageView
     var tempsCompteur:Long = 50000
     lateinit var compteur  : CountDownTimer
+    lateinit var boutonCentrale : ImageView
+
+    //Pour les dossier
+    lateinit var boutonDossier: ImageView
 
 
 
@@ -39,10 +45,11 @@ class BureauActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bureau)
-        thermo = findViewById(R.id.temperature_central)
+        thermo = findViewById(R.id.fond_centrale)
         onBackPressed()
         abonnerBoutons()
         afficherInfosCamarade()
+        nombreDossier()
         compteur = object : CountDownTimer(tempsCompteur, 1000) {
             override fun onTick(millisUntilFinished: Long){
                 decompteCentrale = millisUntilFinished / 1000
@@ -66,8 +73,8 @@ class BureauActivity: AppCompatActivity() {
      */
     fun abonnerBoutons(){
         // abonnement du bouton pour lancer la musique
-        var boutonRadio = findViewById<ImageButton>(androidx.appcompat.R.id.radio);
-        var chanson = MediaPlayer.create(this,R.raw.international_fr)
+        val boutonRadio = findViewById<ImageButton>(androidx.appcompat.R.id.radio);
+        val chanson = MediaPlayer.create(this,R.raw.international_fr)
         boutonRadio.setOnClickListener(View.OnClickListener {
             if(flag == false){
                 chanson.start()
@@ -79,7 +86,7 @@ class BureauActivity: AppCompatActivity() {
             }})
 
         //abonnement bouton dossier
-        var boutonDossier = findViewById<ImageButton>(R.id.bouton_dossier)
+        boutonDossier = findViewById<ImageButton>(R.id.bouton_dossier)
         boutonDossier.setOnClickListener(View.OnClickListener {
             //Gestion temps restant centrale :
             val prefs = getSharedPreferences(MES_PREFS, MODE_PRIVATE)
@@ -106,13 +113,13 @@ class BureauActivity: AppCompatActivity() {
             }
         })
         //Abonnement bouton centrale
-        var boutonCentrale = findViewById<Button>(R.id.bouton_central)
-        boutonCentrale.setOnClickListener(View.OnClickListener { refroidirCentrale() })
+        boutonCentrale = findViewById<ImageButton>(R.id.bouton_central)
+        boutonCentrale.setOnClickListener { refroidirCentrale() }
 //        boutonCentrale.setOnClickListener({ testScore() })
 
 
 
-        var boutonRetour = findViewById<ImageButton>(R.id.bouton_retour)
+        val boutonRetour = findViewById<ImageButton>(R.id.bouton_retour)
         boutonRetour.setOnClickListener(View.OnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             val connexionBDD = GestionBDD(this, DB_NAME, null, DB_VERSION)
@@ -187,6 +194,7 @@ Outils.logPerso("TestCompteur","Dans onResume : " + tempsCompteur.toString())
                 }
             }
                 compteur.start()
+                nombreDossier()
 Outils.logPerso("finDePartie","cas 0 : " + recupererEtatPartie())
             }
             1->{
@@ -211,20 +219,6 @@ Outils.logPerso("finDePartie","cas 2 : " + recupererEtatPartie())
 Outils.logPerso("finDePartie","cas 3 : " + recupererEtatPartie())
             }
         }
-//        compteur = object : CountDownTimer(tempsCompteur, 1000) {
-//            override fun onTick(millisUntilFinished: Long){
-//                decompteCentrale = millisUntilFinished / 1000
-//                fondCentrale(decompteCentrale)
-//                Outils.logPerso("compteur",decompteCentrale.toString())
-//
-//            }
-//            override fun onFinish() {
-//                Outils.toastCourt(applicationContext,"Fin")
-//
-//            }
-//        }
-//        compteur.start()
-
     }
 
     /**
@@ -236,7 +230,7 @@ Outils.logPerso("finDePartie","cas 3 : " + recupererEtatPartie())
         {
             Outils.toastCourt(this,"Trop tôt !")
         } else {
-            thermo.setImageDrawable(getDrawable(R.drawable.thermometre_base))
+            thermo.setImageDrawable(getDrawable(R.drawable.centrale_niveau1))
             compteur.cancel()
             tempsCompteur = 50000
             compteur = object : CountDownTimer(tempsCompteur, 1000) {
@@ -274,18 +268,25 @@ Outils.logPerso("TestCompteur","Dans resumeCentrale : " + tempsRestant.toString(
     /**
      *     Gère la couleur de la centrale en fonction du compteur
      */
+    @SuppressLint("UseCompatLoadingForDrawables")
     fun fondCentrale(temps:Long){
         if(temps < 10 && temps >1){
            if(temps>=9){
                 Outils.toastCourt(applicationContext, "Il reste : " + decompteCentrale.toString() + " secondes avant BOOM")
            }
-            thermo.setImageDrawable(getDrawable(R.drawable.thermometre_etape5))
+            thermo.setImageDrawable(getDrawable(R.drawable.centrale_niveau5))
+            boutonCentrale.visibility = View.VISIBLE
         } else if(temps <40 && temps > 30){
-            thermo.setImageDrawable(getDrawable(R.drawable.thermometre_etape2))
+            thermo.setImageDrawable(getDrawable(R.drawable.centrale_niveau2))
+            boutonCentrale.visibility = View.GONE
         } else if(temps <=30 && temps > 20) {
-            thermo.setImageDrawable(getDrawable(R.drawable.thermometre_etape3))
+            thermo.setImageDrawable(getDrawable(R.drawable.centrale_niveau3))
+            boutonCentrale.visibility = View.GONE
         }else if(temps <=20 && temps > 10) {
-            thermo.setImageDrawable(getDrawable(R.drawable.thermometre_etape4))
+            thermo.setImageDrawable(getDrawable(R.drawable.centrale_niveau4))
+            boutonCentrale.visibility = View.GONE
+        }else{
+            boutonCentrale.visibility = View.GONE
         }
     }
 
@@ -334,5 +335,17 @@ Outils.logPerso("TestCompteur","Dans resumeCentrale : " + tempsRestant.toString(
         }
 
         return checkPartie
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    fun nombreDossier(){
+        val prefs = this.getSharedPreferences(MES_PREFS, MODE_PRIVATE)
+        when(prefs.getInt(KEY_NB_TACHES,0)){
+            0-> boutonDossier.setBackgroundResource(R.drawable.dossier5)
+            1-> boutonDossier.setBackgroundResource(R.drawable.dossier4)
+            2-> boutonDossier.setBackgroundResource(R.drawable.dossier3)
+            3-> boutonDossier.setBackgroundResource(R.drawable.dossier2)
+            4-> boutonDossier.setBackgroundResource(R.drawable.dossier1)
+        }
     }
 }
